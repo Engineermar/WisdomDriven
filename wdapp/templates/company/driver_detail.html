@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+  <h3>{{ Drivers.name|capfirst }}</h3>
+  <p>{{ Drivers.sex }}</p>
+  {% if Drivers.Drivers_id %}
+    <p>Drivers_id: {{ Drivers.Drivers_id }}</p>
+  {% endif %}
+  {% if Drivers.sex %}
+    <p>Sex: {{ Drivers.sex }}</p>
+  {% endif %}
+  {% if Drivers.age %}
+    <p>Age: {{ Drivers.age }}</p>
+  {% endif %}
+  {% if Drivers.Expenses.all %}
+    <p>Expenses for:</p>
+    <ul>
+      {% for Expense in Expenses.all %}
+        <li>{{ Expense.name }}</li>
+        <li>{{ Expense.Receipt_type }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <p>Submitted by: {{ Drivers.name }}</p>
+  <p>hire date: {{ Drivers.hire_date|date:"M d Y" }}</p>
+  <p>Drivers ID:{{ Expenses.Drivers_id }}</p>
+</div>
+{% endblock %}

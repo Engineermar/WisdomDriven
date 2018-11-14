@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+  {% for driver in Drivers %}
+    <div class="drivername">
+      <a href="{% url 'driver_detail' driver.Drivers_id %}">
+        <h3>{{ driver.name|capfirst }}</h3>
+      </a>
+      <p>{{ driver.sex }}</p>
+      {% if driver.age %}
+        <p>Age: {{ driver.age }}</p>
+      {% endif %}
+      <p class="hidden">{{ driver.Drivers_id }}</p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
