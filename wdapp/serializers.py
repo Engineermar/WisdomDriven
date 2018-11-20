@@ -4,8 +4,7 @@ from rest_framework import serializers
 #from notes.serializers import NoteSerializer
 from rest_framework import serializers
 
-from wdapp.models import Company, Cargo, Customer, Driver, Order, OrderDetails
-#from generic_relations.relations import GenericRelatedField
+from wdapp.models import Company, Cargo, Business, Driver, BusinessOrder, CargoManifest,DriverExpense
 from rest_framework import serializers
 #from notes.models import Note
 
@@ -17,69 +16,139 @@ from rest_framework import serializers
 class CompanySerializer(serializers.ModelSerializer):
     logo = serializers.SerializerMethodField()
 
-    def get_logo(self, restaurant):
+    def get_logo(self, company):
         request = self.context.get('request')
-        logo_url = restaurant.logo.url
+        logo_url = company.logo.url
         return request.build_absolute_uri(logo_url)
 
     class Meta:
         model = Company
-        fields = ("id", "name", "phone", "address", "logo")
-
+        fields = '__all__'
 class CargoSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
-    def get_image(self, meal):
+    def get_image(self, cargo):
         request = self.context.get('request')
-        image_url = meal.image.url
+        image_url = cargo.image.url
         return request.build_absolute_uri(image_url)
 
     class Meta:
         model = Cargo
-        fields = ("id", "name", "short_description", "image", "price")
+        fields = '__all__'
+class BusinessSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
 
-# ORDER SERIALIZER
-class OrderCustomerSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source="user.get_full_name")
+    def get_image(self, cargo):
+        request = self.context.get('request')
+        image_url = cargo.image.url
+        return request.build_absolute_uri(image_url)
 
     class Meta:
-        model = Customer
-        fields = ("id", "name", "avatar", "phone", "address")
+        model = Cargo
+        fields = '__all__'        
+class CargoManifestSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
 
-class OrderDriverSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField(source="user.get_full_name")
+    def get_image(self, cargo):
+        request = self.context.get('request')
+        image_url = cargo.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = Cargo
+        fields = '__all__'     
+class CargoManifestSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, cargo):
+        request = self.context.get('request')
+        image_url = cargo.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = Cargo
+        fields = '__all__'   
+class BusinessOrderSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, cargo):
+        request = self.context.get('request')
+        image_url = cargo.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = Cargo
+        fields = '__all__'   
+class StopSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, cargo):
+        request = self.context.get('request')
+        image_url = cargo.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = Cargo
+        fields = '__all__'      
+class ExpenseSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, expense):
+        request = self.context.get('request')
+        image_url = expense.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = DriverExpense
+        fields = '__all__'   
+class DriverSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, driver):
+        request = self.context.get('request')
+        image_url = driver.image.url
+        return request.build_absolute_uri(image_url)
 
     class Meta:
         model = Driver
-        fields = ("id", "name", "avatar", "phone", "address")
+        fields = '__all__' 
+# ORDER SERIALIZER
+class OrderBusinessSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source="user.name")
 
+    class Meta:
+        model = Business
+        fields = '__all__'
+class OrderDriverSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source="user.name")
+
+    class Meta:
+        model = Driver
+        fields = '__all__'
 class OrderCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = ("id", "name", "phone", "address")
-
+        fields = '__all__'
 class OrderCargoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cargo
-        fields = ("id", "name", "price")
-
+        fields = '__all__'
 class OrderDetailsSerializer(serializers.ModelSerializer):
-    meal = OrderCargoSerializer()
+    cargo = OrderCargoSerializer()
 
     class Meta:
-        model = OrderDetails
-        fields = ("id", "meal", "quantity", "sub_total")
-
+        model = CargoManifest
+        fields = '__all__'
 class OrderSerializer(serializers.ModelSerializer):
-    customer = OrderCustomerSerializer()
+    customer = OrderBusinessSerializer()
     driver = OrderDriverSerializer()
-    restaurant = OrderCompanySerializer()
+    company = OrderCompanySerializer()
     order_details = OrderDetailsSerializer(many = True)
     status = serializers.ReadOnlyField(source = "get_status_display")
 
     class Meta:
-        model = Order
-        fields = ("id", "customer", "restaurant", "driver", "order_details", "total", "status", "address")
+        model = BusinessOrder
+        fields = '__all__'
         
 #class LeadSerializer(serializers.ModelSerializer):
    # notes = NoteSerializer(many=True, read_only=True)
