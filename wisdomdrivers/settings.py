@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wdapp',
-    
+    'budgetapp',
     #'oauth2_provider',
     
     'rest_framework.authtoken',
