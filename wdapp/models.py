@@ -25,17 +25,17 @@ class Company(models.Model): #Truck Company
         )
     
     user = models.OneToOneField(User,related_name='company', on_delete=models.CASCADE,null =True)
-    company_name = models.CharField(max_length=500,null =True)
+    company = models.CharField(max_length=500,null =True)
     company_id=models.IntegerField(null =True)
     phone = models.CharField(max_length=500,null =True)
-    logo = models.ImageField(upload_to='company_logo_', blank=False)
+    #logo = models.ImageField(upload_to='company_logo_', blank=False)
     #company_name = models.CharField(max_length=150, db_index=True)
    # point_of_contact = models.ForeignKey(User)
-    slug = models.SlugField(max_length=120,db_index=True,null=True)
+    #slug = models.SlugField(max_length=120,db_index=True,null=True)
     address=models.CharField(max_length=500,null =True)
-    business_phone_number = models.IntegerField(null =True)
-    business_email = models.EmailField(blank=True, null=True)
-    email = models.EmailField(null =True)
+    company_phone_number = models.IntegerField(null =True)
+    company_email = models.EmailField(blank=True, null=True)
+    #email = models.EmailField(null =True)
     time_open= models.TimeField(null =True)
     time_closed = models.TimeField(null =True)
     created = models.DateTimeField(auto_now_add=True,null =True)
@@ -43,7 +43,7 @@ class Company(models.Model): #Truck Company
     other_details = models.TextField(null =True)
     business_net_worth=models.IntegerField(null =True)
     def _str_(self):
-        return self.name 
+        return self.company 
     def _str_2(self):
         return self.company_id 
     #def __str__3(self):
@@ -67,9 +67,10 @@ class Driver(models.Model): #Driver for the Company
         (CLASS_A, 'class a'),
         (CLASS_B, 'class b'),
         (CLASS_C, 'class c'),)
-    driver = models.CharField(max_length=50,null =True)
-    company_name=models.ForeignKey(Company,on_delete=models.CASCADE,related_name="+",null=True)
-    company_id=models.ForeignKey(Company,on_delete=models.CASCADE,related_name="+",null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='driver',null=True)
+    name = models.CharField(max_length=50,null =True)
+    
+    company_id=models.ForeignKey(Company,related_name="drivers_company_id_set",on_delete=models.CASCADE,null=True)
     phone = models.CharField(max_length=500, blank=True)
     address=models.CharField(max_length=500,null =True)
     ssn=models.CharField(max_length=9, db_index=True,null =True)
@@ -104,21 +105,21 @@ class Business(models.Model):
         (OTHER,'other'),
         )
     
-    
-    name = models.CharField(max_length=150, db_index=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='business',null=True)
+    business = models.CharField(max_length=150, db_index=True)
     point_of_contact = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=120,db_index=True)
+    #slug = models.SlugField(max_length=120,db_index=True)
     address=models.CharField(max_length=500,null =True)
     business_phone_number = models.IntegerField(null =True)
     business_email = models.EmailField(blank=True, null=True)
-    email = models.EmailField(null =True)
+    #email = models.EmailField(null =True)
     website = models.TextField(null =True)
     industry = models.IntegerField(choices= INDUSTRY)
     time_open= models.TimeField(null =True)
     time_closed = models.TimeField(null =True)
     availability = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True,null =True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True,null=True)
     business_id=  models.IntegerField(null =True)
     other_details = models.TextField(null =True)
     
@@ -157,7 +158,7 @@ class Cargo(models.Model):
     cargo = models.CharField(max_length=500,null =True)
     #image = models.ImageField(upload_to='meal_images_', blank=False)
     
-    price = models.IntegerField(default=0)
+    price = models.IntegerField(default=0,null=True)
     category = models.IntegerField(choices= INDUSTRY_TYPE,null =True)
     state_of_matter=models.IntegerField(choices= MATTER_STATE,null =True)
     weight=models.IntegerField(null=True) #LBS
@@ -218,23 +219,23 @@ class BusinessOrder(models.Model):#Business and Company only
         (DELIVERY, 'delivery'),)
     date_created = models.DateTimeField(auto_now_add=True,null =True)
     service_type=models.IntegerField(choices= SERVICE,null =True)
-    name=models.ForeignKey(Business, related_name='+',on_delete=models.CASCADE,null =True)
-    business_id=models.ForeignKey(Business, related_name='+',on_delete=models.CASCADE,null =True)
-    company=models.ForeignKey(Company)
+    
+    business_id=models.ForeignKey(Business, related_name='businessorders_business_id_set',on_delete=models.CASCADE,null =True)
+    company=models.ForeignKey(Company,related_name="businessorder_company_set", on_delete=models.CASCADE, null=True)
     #company_id=models.ForeignKey(Company, related_name='+',on_delete=models.CASCADE,null=True)
     point_of_contact= models.CharField(max_length=100)
-    cargo = models.ForeignKey(Cargo,related_name='+',on_delete=models.CASCADE,null =True)
+    cargo = models.ForeignKey(Cargo,related_name='businessorder_cargo_set',on_delete=models.CASCADE,null =True)
     quantity=models.IntegerField(default=0)
-    weight = models.ForeignKey(Cargo,related_name='+',on_delete=models.CASCADE,null =True)
-    volume=models.ForeignKey(Cargo,related_name='+',on_delete=models.CASCADE,null =True)
-    price=models.ForeignKey(Cargo, related_name="+",null=True)
+    weight = models.ForeignKey(Cargo,related_name='businessorder_weight_set',on_delete=models.CASCADE,null =True)
+    volume=models.ForeignKey(Cargo,related_name='businessorder_volume_set',on_delete=models.CASCADE,null =True)
+    price=models.ForeignKey(Cargo, related_name="businessorder_price_set",null=True)
     address=models.CharField(max_length=500,null =True)
     distance_from_company_to_business = models.DecimalField(max_digits=10,decimal_places=2)
-    preferred_delivery_date = models.DateTimeField(auto_now_add=False)
-    preferred_pickup_date = models.DateTimeField(auto_now_add=False)
+    preferred_delivery_date = models.DateTimeField(auto_now_add=False,null =True)
+    preferred_pickup_date = models.DateTimeField(auto_now_add=False,null =True)
     #order_total=models.IntegerField(default=0)
     order_id=models.IntegerField(null=True)
-    overall_hazmat_class=models.IntegerField(choices= HAZMAT_CLASS,null =True)
+    hazmat_class=models.IntegerField(choices= HAZMAT_CLASS,null =True)
     def get_business_id(self):
         return self.business_id
     def get_service_type(self):
@@ -296,19 +297,19 @@ class BusinessOrder(models.Model):#Business and Company only
 class CargoManifest(models.Model): #For Driver and Company only #STATIC INFORMATION
     #STATIC INFORMATION : For Company and Employee usage. Heavy usage of "_id" extension.
     ##The driver/company can determine the Truck he will need for the trip and distance from facility. The overall hazmat class is listed as well
-    driver_id=models.ForeignKey(Driver)
-    date_created = models.ForeignKey(BusinessOrder)
-    company_id = models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    order_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    cargo_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    overall_hazmat_class=models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    service_type=models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    location = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    address = models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    point_of_contact= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    weight= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    volume= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    quantity=models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
+    driver_id=models.ForeignKey(Driver, related_name="cargomanifests_driver_id_set",null=True)
+    date_created = models.ForeignKey(BusinessOrder, related_name="cargomanifests_date_created_set",null=True)
+    company_id = models.ForeignKey(BusinessOrder, related_name="cargomanifests_company_id_set",null=True)
+    order_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_order_id_set",null=True)
+    cargo_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_cargo_id_set",null=True)
+    hazmat_class=models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifest_hazmat_class_set",null=True)
+    service_type=models.ForeignKey(BusinessOrder, related_name="cargomanifests_service_type_set",null=True)
+    location = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_location_set",null=True)
+    address = models.ForeignKey(BusinessOrder, related_name="cargomanifests_adress_set",null=True)
+    point_of_contact= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_point_of_contact_set",null=True)
+    weight= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_weight_set",null=True)
+    volume= models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_volume_set",null=True)
+    quantity=models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="cargomanifests_quantity_set",null=True)
     manifest_id=models.IntegerField(null=True)
     #delivery_location = models.IntegerField(null =True)
     def get_manifest_id(self):
@@ -358,28 +359,28 @@ class Trip(models.Model): #Driver and Company
     CARD=((YES,'yes'),
               (NO,'no'),)
     
-    driver_id=models.ForeignKey(CargoManifest)
-    company_id = models.ForeignKey(CargoManifest,related_name='+',on_delete=models.CASCADE,null =True)
-    business_id = models.ForeignKey(BusinessOrder,related_name='+',on_delete=models.CASCADE,null =True)
-    manifest_id=models.ForeignKey(CargoManifest, related_name='+',on_delete=models.CASCADE,null =True)
-    slug = models.SlugField(max_length=150, db_index=True)
-    location=models.CharField(max_length=100)
-    order_created = models.ForeignKey(CargoManifest,related_name='+',on_delete=models.CASCADE,null =True)
-    order_updated = models.ForeignKey(CargoManifest,related_name='+',on_delete=models.CASCADE,null =True)
-    location_start = models.CharField(max_length=100)
-    location_end = models.CharField(max_length=100)
-    beginningOdometer=models.DecimalField(max_digits=10,decimal_places=2)
-    endingOdometer=models.DecimalField(max_digits=10,decimal_places=2)
+    driver_id=models.ForeignKey(CargoManifest, related_name="trips_driver_id_set",null=True)
+    company_id = models.ForeignKey(CargoManifest,related_name='trips_company_id_set',on_delete=models.CASCADE,null =True)
+    
+    manifest_id=models.ForeignKey(CargoManifest, related_name='trips_manifest_id_set',on_delete=models.CASCADE,null =True)
+    #slug = models.SlugField(max_length=150, db_index=True)
+    location=models.CharField(max_length=100, null=True)
+    order_created = models.ForeignKey(CargoManifest,related_name='trips_order_created_set',on_delete=models.CASCADE,null =True)
+    order_updated = models.ForeignKey(CargoManifest,related_name='trips_order_updated_set',on_delete=models.CASCADE,null =True)
+    location_start = models.CharField(max_length=100,null=True)
+    location_end = models.CharField(max_length=100,null=True)
+    beginningOdometer=models.DecimalField(max_digits=10,decimal_places=2,null=True)
+    endingOdometer=models.DecimalField(max_digits=10,decimal_places=2,null=True)
     trailer_number=models.IntegerField(null =True)
-    total_miles_traveled=models.DecimalField(max_digits=4,decimal_places=1)
-    average_price_per_gallon=models.DecimalField(max_digits=10,decimal_places=2)
+    total_miles_traveled=models.DecimalField(max_digits=4,decimal_places=1,null=True)
+    average_price_per_gallon=models.DecimalField(max_digits=10,decimal_places=2,null=True)
     #Capture_GPS_of_Location=
     gallons_of_gas_used=models.IntegerField(null =True)
     number_of_unscheduled=models.IntegerField(null =True)
-    beginnning_weather_conditions = models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL)
-    midway_weather_conditions= models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL)
-    ending_weather_conditions = models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL)
-    fuel_card_usage=models.IntegerField(choices=CARD, default=YES)
+    beginnning_weather_conditions = models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL,null=True)
+    midway_weather_conditions= models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL,null=True)
+    ending_weather_conditions = models.IntegerField(choices=WEATHER_CONDITIONS, default=NORMAL,null=True)
+    fuel_card_usage=models.IntegerField(choices=CARD, default=YES,null=True)
     #fuelTotal=average_price_per_gallon * total_miles_traveled
     #milesTraveled=beginningOdometer-endingOdometer
     #drivers_trip_number=models.ForeignKey(Driver,related_name='trip_number',on_delete=models.CASCADE,null =True) +1
@@ -399,18 +400,18 @@ class OrderStatus(models.Model): # Delivery or Trucking company handles this . C
         (DELIVERED, "Delivered"),
         (FAILED, "failed"),
     )
-    order_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="+",null=True)
-    date_created = models.ForeignKey(BusinessOrder,related_name="+")
-    business=models.ForeignKey(BusinessOrder,related_name="+",null=True)
-    company = models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    service_type=models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    cargo= models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    quantity=models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    address=models.ForeignKey(BusinessOrder, related_name="+",null=True)
-    driver = models.ForeignKey(Trip,on_delete=models.CASCADE,related_name="+",null=True)
-    location=models.ForeignKey(Trip,on_delete=models.CASCADE,related_name="+",null=True) #current location
-    status = models.IntegerField(choices = STATUS_CHOICES)
-    order_updated = models.DateTimeField(auto_now=False) 
+    order_id = models.ForeignKey(BusinessOrder,on_delete=models.CASCADE,related_name="orderstatus_order_id_set",null=True)
+    date_created = models.ForeignKey(BusinessOrder,related_name="orderstatus_date_created_set",null=True)
+    business_id=models.ForeignKey(BusinessOrder,related_name="orderstatus_business_id_set",null=True)
+    company_id = models.ForeignKey(BusinessOrder, related_name="orderstatus_company_id_set",null=True)
+    service_type=models.ForeignKey(BusinessOrder, related_name="orderstatus_service_type_set",null=True)
+    cargo= models.ForeignKey(BusinessOrder, related_name="orderstatus_cargo_set",null=True)
+    quantity=models.ForeignKey(BusinessOrder, related_name="orderstatus_quanity_set",null=True)
+    address=models.ForeignKey(BusinessOrder, related_name="orderstatus_adress_set",null=True)
+    name = models.ForeignKey(Trip,on_delete=models.CASCADE,related_name="orderstatus_name_set",null=True)
+    location=models.ForeignKey(Trip,on_delete=models.CASCADE,related_name="orderstatus_location_set",null=True) #current location
+    status = models.IntegerField(choices = STATUS_CHOICES,null=True)
+    order_updated = models.DateTimeField(auto_now=False,null=True) 
     picked_at = models.DateTimeField(auto_now_add=True,null =True)
     estimated_arrival=models.DateTimeField(blank = True, null = True)
     order_details=models.TextField(null =True)
@@ -436,7 +437,7 @@ class Stop(models.Model): #Driver and Company only
         (OTHER, 'other')
         )    
     stop_id= models.IntegerField(null=True) 
-    driver_id = models.ForeignKey(CargoManifest, related_name='+',on_delete=models.CASCADE,null =True)
+    driver_id = models.ForeignKey(CargoManifest, related_name='stop_driver_id_set',on_delete=models.CASCADE,null =True)
     stop_type=models.IntegerField(choices=STOP_TYPE,null =True) 
     stop_location = models.CharField(max_length=100,null =True)
     time_stop = models.DateTimeField(auto_now_add=True,null =True)
@@ -455,11 +456,11 @@ class DriverExpense(models.Model): #Driver and Company only
         (OTHER, 'other'),
         )    
     expenses_number=models.IntegerField(null =True)
-    driver_id= models.ForeignKey(CargoManifest, related_name='+',on_delete=models.CASCADE,null =True)
+    driver_id= models.ForeignKey(CargoManifest, related_name='driverexpenses_driver_id_set',on_delete=models.CASCADE,null =True)
     
-    stop_id=models.ForeignKey(Stop,related_name="+",on_delete=models.CASCADE,null =True)
-    expense= models.IntegerField(choices=EXPENSE_TYPE)
-    amount = models.IntegerField(default=0)
+    stop_id=models.ForeignKey(Stop,related_name="driverexpenses_stop_id_set",on_delete=models.CASCADE,null =True)
+    expense= models.IntegerField(choices=EXPENSE_TYPE,null=True)
+    amount = models.IntegerField(default=0,null=True)
     def _str_(self):
         return self.expenses_number
 
@@ -484,7 +485,8 @@ class DriverExpense(models.Model): #Driver and Company only
     
 class Record(models.Model): # Company only
     record_id=models.IntegerField(null=True)
-    trip_id = models.ForeignKey(Trip)
-    business_id=models.ForeignKey(Business)
-    manifest_id=manifest_id=models.ForeignKey(CargoManifest)
-    driver_id = models.ForeignKey(Driver)      
+    company_id=models.ForeignKey(BusinessOrder, related_name="records_company_set",null=True)
+    trip_id = models.ForeignKey(Trip, related_name="records_trip_id_set",null=True)
+    business_id=models.ForeignKey(BusinessOrder, related_name="records_business_id_set",null=True)
+    manifest_id=manifest_id=models.ForeignKey(CargoManifest,related_name= "records_manifest_id_set",null=True)
+         
