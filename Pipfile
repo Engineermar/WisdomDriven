@@ -1,0 +1,22 @@
+pip[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = '3.6'
+
+
+[packages]
+flask = "*"
+boto3 = ">=1.4"
+
+
+django = "*"
+
+
+[dev-packages]
+awscli = "*"
+pycodestyle = "*"
+pytest = '*'
