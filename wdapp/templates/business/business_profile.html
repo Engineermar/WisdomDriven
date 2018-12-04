@@ -1,0 +1,46 @@
+{% extends 'business/base.html' %}
+{% load bootstrap3 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+       {{ business.business }} Business Profile
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        <h4 class="panel-title text-center text-white">
+        {{ business.business }}Business  Information
+      </h4>
+
+
+
+
+          {{ business.business_id }}
+          {{ business.address}}
+          {{ business.city}}
+          {{ business.state}}
+          {{ business.phone }}
+          {{ business.business_email }}
+          {{ business.industry}}
+
+                                               {{ business.business }}
+      <button type="submit" class="btn btn-pink">Update</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<a href="{% url 'business-orders' %}">Orders Page</a>
+<a href="{% url 'business-cargo-add' %}">Add Cargo Page</a>
+<a href="{% url 'business-cargo-edit' %}">Edit Cargo Page</a>
+<a href="{% url 'business-report' %}">Business's Statistics</a>
+<a href="{% url 'restaurant-sign-in' %}">Log out</a>
+{% endblock%}
+
+
+

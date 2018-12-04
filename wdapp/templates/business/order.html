@@ -1,0 +1,27 @@
+{% extends 'business/base.html' %}
+{% load bootstrap3 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Place an Order for Transportation of your Cargo:
+         After Completing the form, you will be able to
+                check your orders status
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form order_form %}
+      <button type="submit" class="btn btn-pink">Create</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+<a href="{% url 'business-cargo-add' %}">Add Cargo Page</a>
+<a href="{% url 'business-order-edit' %}">Edit Order Page</a>
+<a href="{% url 'business-profile' %}">Business Profile</a>
+{% endblock%}

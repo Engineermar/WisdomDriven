@@ -1,0 +1,27 @@
+{% extends 'company/base.html' %}
+{% load bootstrap3 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Company Profile
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        <h4 class="panel-title text-center text-white">
+        {{ company.company}}  Information
+      </h4>
+          {{ company.company_id }}
+          {{ company.date_established}}
+          {{ company.user }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock%}
+
+

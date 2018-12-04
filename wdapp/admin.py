@@ -1,19 +1,39 @@
 from django.contrib import admin
 
 # Register your models here.
-from wdapp.models import Company, Business, Driver, Cargo, OrderStatus, BusinessOrder, DriverExpense, Stop,CargoManifest, Record, Trip
+from .models import Company, Business, Driver, OrderStatus, BusinessOrder, DriverExpense, Stop, Trip
 
-#admin.site.register(Business)
-admin.site.register(BusinessOrder)
-#admin.site.register(Customer)
-admin.site.register(Driver)
-admin.site.register(OrderStatus)
-admin.site.register(CargoManifest)
-admin.site.register(Business)
-admin.site.register(Stop)
-admin.site.register(Record)
-admin.site.register(Trip)
-admin.site.register(Cargo)
-#admin.site.register(Order)
-#admin.site.register(OrderDetails)
-admin.site.register(DriverExpense)
+class CompanyAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Company, CompanyAdmin)
+
+class BusinessAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Business, BusinessAdmin)
+
+class DriverAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Driver, DriverAdmin)
+
+
+class OrderStatusAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(OrderStatus, OrderStatusAdmin)
+
+class BusinessOrderAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(BusinessOrder, BusinessOrderAdmin)
+
+class DriverExpenseAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(DriverExpense, DriverExpenseAdmin)
+
+class StopAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Stop, StopAdmin)
+
+
+class TripAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Trip, CompanyAdmin)
+

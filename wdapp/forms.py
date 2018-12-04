@@ -1,15 +1,16 @@
 from django import forms
 
 from django.contrib.auth.models import User
-from wdapp.models import Company, Cargo, Business, BusinessOrder, Stop,DriverExpense,Trip
+from wdapp.models import Company,  Business, BusinessOrder, Stop,DriverExpense,Trip,Driver
 
 class UserForm(forms.ModelForm):
-    email = forms.CharField(max_length=100, required=True)
+
     password = forms.CharField(widget=forms.PasswordInput())
     username=  forms.CharField(max_length=100, required=True)
     class Meta:
         model = User
-        fields = ("username", "password",  "email")
+        fields = ("username", "password")
+
 
 class UserFormForEdit(forms.ModelForm):
     email = forms.CharField(max_length=100, required=True)
@@ -21,39 +22,46 @@ class UserFormForEdit(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = '__all__'
+        exclude = ['company_id','user']
         #fields = '__all__'("name", "phone", "address", )#"logo")
-
-class DriverExpenseForm(forms.ModelForm):
+class DriverForm(forms.ModelForm):
     class Meta:
-        model = Cargo
-        fields = '__all__'
-       # fields = '__all__'("company",)
-
+        model = Driver
+        exclude = ['company_id','user','driver_id']
+        #fields = '__all__'("name", "phone", "address", )#"logo")
 class BusinessForm(forms.ModelForm):
     class Meta:
         model = Business
-        fields = '__all__'
-class CargoForm(forms.ModelForm):
+        exclude = ['business_id','user']
+
+class DriverExpenseForm(forms.ModelForm):
     class Meta:
-        model = Cargo
-        fields = '__all__'
+        model = DriverExpense
+        exclude = ['expense_id']
+       # fields = '__all__'("company",)
+
+
+
 
 class StopForm(forms.ModelForm):
     class Meta:
         model = Stop
-        
-        
-        
-        fields = '__all__'
+
+
+
+        exclude = ['stop_id']
 class BusinessOrderForm(forms.ModelForm):
     class Meta:
         model = BusinessOrder
-        fields = '__all__'
-        
+
+        exclude = ['business_id','order_id','weight','volume','date_created']
+
+
+
+
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
-        fields = '__all__'
-  
-        
+        exclude = ['trip_id']
+
+

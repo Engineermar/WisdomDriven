@@ -1,0 +1,54 @@
+{% extends 'driver/base.html' %}
+{% load bootstrap3 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Driver Profile
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        <h4 class="panel-title text-center text-white">
+        {{ driver.name }} Basic Information
+      </h4>
+
+
+          {{ driver.sex }}
+          {{ driver.date_of_birth}}
+          {{ driver.ssn}}
+          {{ driver.address}}
+          {{ driver.city}}
+          {{ driver.state}}
+          {{ driver.phone }}
+          {{ driver.email }}
+          <h4 class="panel-title text-center text-white">
+        {{ driver.company }} Employee/Driver Specific Information
+      </h4>
+
+          {{ driver.driver_id }}
+          {{ driver.date_hired}}
+          {{ driver.location}}
+          {{ driver.wage_plan}}
+          {{ driver.license}}
+          {{ driver.other_license}}
+          {{ driver.other_license_2}}
+          {{ driver.license_number}}
+
+                                                {{ driver.user }}
+      <button type="submit" class="btn btn-pink">Update</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<a href="{% url 'driver-profile' %}">Driver's Statistics</a>
+<a href="{% url 'driver-trip' %}">Trips Page</a>
+<a href="{% url 'company-profile' %}"> Company Profile</a>
+<a href="{% url 'restaurant-sign-in' %}">Log out</a>
+{% endblock%}
+

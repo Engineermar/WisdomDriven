@@ -1,0 +1,22 @@
+{% extends 'base_signup.html' %}
+{% load bootstrap3 %}
+{% block title %}{{ driver.company}} Trip form {% endblock %}
+{% block heading %} Trip form: Log information about your trip below {% endblock %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% bootstrap_form trip_form %}
+
+    {{%trip_form %}}
+
+    <button type="submit" class="btn btn-pink pull-right">Null </button>
+  </form>
+
+
+<a href="{% url 'driver-trip-expense' %}">Expense Page</a>
+<a href="{% url 'driver-trip-stop' %}">Stop Page</a>
+<a href="{% url 'driver-profile' %}"> Driver's Profile</a>
+<a href="{% url 'company-sign-in' %}">Log out</a>
+{% endblock %}

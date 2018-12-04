@@ -1,18 +1,17 @@
 {% extends 'base_signup.html' %}
 {% load bootstrap3 %}
 
-
 {% block title %}Wisdom Drivers{% endblock %}
-{% block heading %}Wisdom Drivers Company - Sign Up{% endblock %}
+{% block heading %}Business - Sign Up{% endblock %}
 
 {% block content %}
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form user_form %}
-    {% bootstrap_form company_form %}
+    {% bootstrap_form business_form %}
 
     <button type="submit" class="btn btn-pink pull-right">Sign Up</button>
   </form>
 
-  <a href="{% url 'company-sign-in' %}">Already have an account?</a>
+  <a href="{% url 'business-sign-in' %}">Already have an account?</a>
 {% endblock %}

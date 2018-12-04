@@ -20,44 +20,38 @@
                 })
             }, 3000)
         })
-
     </script>
 {% endblock %}
 
 {% block sidebar %}
 
-    {% url 'company-order' as company_order_url %}
-    {% url 'company-cargo' as company_cargo_url %}
-    {% url 'company-report' as company_report_url %}
-    {% url 'company-customer' as company_customer_url %}
 
-    {% url 'company-account' as company_account_url %}
+
+    {% url 'company-profile' as company_profile_url %}
+    {% url 'company-order' as company_order_url %}
+    {% url 'company-employee' as company_employee_url %}
+    {% url 'company-profile' as company_profile_url %}
 
     <div class="text-center">
       <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.company.logo }}"
           width="70" height="70" />
       <br/>
       <br/>
-      <h4>Hi, {{ request.user.get_full_name }}</h4>
-      <h5>{{ request.user.company.name }}</h5>
+      <h4>Hi, {{ request.user.company }}</h4>
+      <h5>{{ request.user.company.company }}</h5>
     </div>
 
     <div class="list-group">
       <span class="text-uppercase">Dashboard</span>
 
-      <a href="{% url 'company-order' %}"
-          class="list-group-item {% if request.path == company_order_url %} active {% endif %} ">
-          Orders
-          <span class="badge"></span>
-      </a>
-      <a href="{% url 'company-cargo' %}"
-          class="list-group-item {% if request.path == company_cargo_url %} active {% endif %} ">Cargos</a>
-      <a href="{% url 'company-report' %}"
-          class="list-group-item {% if request.path == company_report_url %} active {% endif %} ">Reports</a>
+
+
+      <a href="{% url 'company-profile' %}"
+          class="list-group-item {% if request.path == company_profile_url %} active {% endif %} ">profiles</a>
 
       <span class="text-uppercase">Profile</span>
-      <a href="{% url 'company-account' %}"
-          class="list-group-item {% if request.path == company_account_url %} active {% endif %} ">Account</a>
+      <a href="{% url 'company-profile' %}"
+          class="list-group-item {% if request.path == company_profile_url %} active {% endif %} ">Profile</a>
     </div>
 
     <div class="text-center">

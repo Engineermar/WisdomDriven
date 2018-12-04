@@ -1,0 +1,60 @@
+{% extends 'company/base.html' %}
+
+{% block page %}
+
+    <div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">{{ order_id.company }} Orders</h4>
+        </div>
+        <div class="panel-body">
+            <br/>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                  <tr class="bg-gray text-white">
+                    <th>Business</th>
+                    <th>Order Id</th>
+                    <th>Date Ordered</th>
+                    <th>Serivce Type</th>
+                    <th>Cargo</th>
+                    <th>Quantity</th>
+                    <th>Delivery address</th>
+                    <th>Driver</th>
+                    <th>Status</th>
+                    <th>Drivers Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_id in order_ids %}
+                        <tr>
+                            <td scope="row">{{ order_id.id }}</td>
+
+                            <td>{{ order_id.business }}</td>
+                            <td>{{ order_id.order_id }}</td>
+                            <td>{{ order_id.date_created }}</td>
+                            <td>{{ order_id.service_type }}</td>
+                            <td>{{ order_id.hazmat_clas }}</td>
+                            <td>{{ order_id.cargo }}</td>
+                            <td>{{ order_id.quantity }}</td>
+                            <td>{{ order_id.service_type }}</td>
+                            <td>{{ order_id.address }}</td>
+                            <td>{{ order_id.name }}</td>
+                            <td>{{ order_id.status }}</td>
+                            <td>{{ order_id.location }}</td>
+                            <td>
+                                {% if order_id.status == 1 %}
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <input name="id" value="{{ order.id }}" hidden>
+                                      <button class="btn btn-success">Ready</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

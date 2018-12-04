@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %} driver {% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            var now = new Date();
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/driver/trip/notification/' + now.toISOString() + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        if (data['notification'] === 0) {
+                            $('.badge').text('');
+                        } else {
+                            $('.badge').text(data['notification']);
+                        }
+                    }
+                })
+            }, 3000)
+        })
+    </script>
+{% endblock %}
+
+{% block sidebar %}
+
+    {% url 'driver-trip' as driver_trip_url %}
+    {% url 'driver-trip-stop' as driver_trip_stop_url %}
+    {% url 'driver-trip-expense' as driver_trip_expense_url %}
+    {% url 'driver-profile' as driver_profile_url %}
+
+
+    {% url 'driver-profile' as driver_profile_url %}
+
+    <div class="text-center">
+      <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.driver.driver_id }}"
+          width="70" height="70" />
+      <br/>
+      <br/>
+      <h4>Hi, {{ request.user.driver }}</h4>
+      <h5>{{ request.user.driver.name }}</h5>
+    </div>
+
+    <div class="list-group">
+      <span class="text-uppercase">Dashboard</span>
+
+      <a href="{% url 'driver-trip' %}"
+          class="list-group-item {% if request.path == driver_trip_url %} active {% endif %} ">
+          trips
+          <span class="badge"></span>
+      </a>
+      <a href="{% url 'driver-trip' %}"
+          class="list-group-item {% if request.path == driver_trip_url %} active {% endif %} ">trips</a>
+      <a href="{% url 'driver-profile' %}"
+          class="list-group-item {% if request.path == driver_profile_url %} active {% endif %} ">Driver Statistics</a>
+
+      <span class="text-uppercase">Profile</span>
+      <a href="{% url 'driver-profile' %}"
+          class="list-group-item {% if request.path == driver_profile_url %} active {% endif %} ">profile</a>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'driver-sign-out' %}?next={{ request.path }}"
+          class="btn btn-pink">Logout</a>
+    </div>
+
+{% endblock %}

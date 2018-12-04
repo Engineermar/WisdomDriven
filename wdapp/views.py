@@ -1,19 +1,44 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from wdapp.forms import UserForm, CompanyForm, UserFormForEdit, CargoForm,CargoForm, BusinessForm, BusinessOrderForm, StopForm,DriverExpenseForm,TripForm
+from wdapp.forms import UserForm, CompanyForm, UserFormForEdit, BusinessForm, BusinessOrderForm, StopForm,DriverExpenseForm,TripForm, DriverForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from wdapp.models import Cargo, OrderStatus, Driver,DriverExpense,DriverExpense, CargoManifest,Trip,Stop,Business,BusinessOrder
+from wdapp.models import OrderStatus, Driver,DriverExpense,DriverExpense,Trip,Stop,Business,BusinessOrder
 from django.db.models import Sum, Count, Case, When
+from django.shortcuts import render
+from django.http import HttpResponse
+
+
+
 def home(request):
     return redirect(company_home)
 def obtain_auth_token(request):
     return redirect(company_home)
+
+def company_login(request):
+    return render(request, 'company/sign_in.html', {
+        "form": form
+    })
+
+def business_login(request):
+    return render(request, 'business/sign_in.html', {
+        "form": form
+    })
+def driver_login(request):
+    return render(request, 'driver/sign_in.html', {
+        "form": form
+    })
+def company_logout(request):
+    return redirect(company_login)
+def business_logout(request):
+    return redirect(business_login)
+def driver_logout(request):
+    return redirect(driver_login)
 @login_required(login_url='/company/sign-in/')
 def company_home(request):
-    return redirect(company_account)
+    return redirect(company_profile)
 @login_required(login_url='/company/sign-in/')
-def company_account(request):
+def company_profile(request):
     user_form = UserFormForEdit(instance = request.user)
     company_form = CompanyForm(instance = request.user.company)
 
@@ -25,66 +50,42 @@ def company_account(request):
             user_form.save()
             company_form.save()
 
-    return render(request, 'company/account.html', {
+
+    return render(request, 'company/company_profile.html', {
         "user_form": user_form,
         "company_form": company_form
     })
-@login_required(login_url='/company/sign-in/')
-def company_cargo(request):
-    cargos = Cargo.objects.filter(company = request.user.company).order_by("company_id")
-    return render(request, 'company/cargo.html', {"cargos": cargos})
-@login_required(login_url='/company/sign-in/')
-def company_add_cargo(request):
-    form = CargoForm()
+
+
+
+
+@login_required(login_url='/business/sign-in/')
+def business_add_order(request):
+    form = BusinessOrderForm()
 
     if request.method == "POST":
-        form = CargoForm(request.POST, request.FILES)
+        form = BusinessOrderForm(request.POST, request.FILES)
 
         if form.is_valid():
-            cargo = form.save(commit=False)
-            cargo.company = request.user.company
-            cargo.save()
-            return redirect(company_cargo)
+            order = form.save(commit=False)
+            order.business = request.user.business
+            order.save()
+            return redirect(business_order)
 
-    return render(request, 'company/add_cargo.html', {
+    return render(request, 'business/order.html', {
         "form": form
     })
-@login_required(login_url='/company/sign-in/')
-def company_edit_cargo(request, cargo_id):
-    form = CargoForm(instance = Cargo.objects.get(id = cargo_id))
 
-    if request.method == "POST":
-        form = CargoForm(request.POST, request.FILES, instance = Cargo.objects.get(id = cargo_id))
 
-        if form.is_valid():
-            form.save()
-            return redirect(company_cargo)
 
-    return render(request, 'company/edit_cargo.html', {
-        "form": form
-    })
-def company_edit_order(request, cargo_id):
-    form = BusinessOrderForm(instance = BusinessOrder.objects.get(id = company_id))
 
-    if request.method == "POST":
-        form = BusinessOrderForm(request.POST, request.FILES, instance = BusinessOrder.objects.get(id = company_id))
-
-        if form.is_valid():
-            form.save()
-            return redirect(company_current_orders)
-
-    return render(request, 'company/edit_order.html', {
-        "form": form
-    })
 def company_current_orders(request):
-    cargos = CargoManifest.objects.filter(company = request.user.company).order_by("company_id")
-    return render(request, 'company/cargomanifest.html', {"cargos": cargos})
+    orders = OrderStatus.objects.filter(company = request.user.company).order_by("company_id")
+    return render(request, 'company/order.html', {"orders": orders})
+
+
 @login_required(login_url='/company/sign-in/')
-def company_all_orders(request):
-    cargos = BusinessOrder.objects.filter(company = request.user.driver).order_by("company_id")
-    return render(request, 'company/order.html', {"cargos": cargos})
-@login_required(login_url='/company/sign-in/')
-def company_report(request):
+def company_stats(request):
     #Calculate revenue and number of orders by current week
     from datetime import datetime, timedelta
 
@@ -94,25 +95,26 @@ def company_report(request):
     #Calculate weekdays
     today = datetime.now()
     current_weekdays = [today + timedelta(days = i) for i in range( 0 - today.weekday(), 7- today.weekday())]
-
+    print(dir(request))
     for day in current_weekdays:
-        delivered_orders = Order.objects.filter(
-            company = request.user.company,
-            status = Order.DELIVERED,
+        delivered_orders = BusinessOrder.objects.filter(
+            company = request.company,
+            status = OrderStatus.DELIVERED,
             created_at__year = day.year,
             created_at__month = day.month,
             created_at__day = day.day
         )
+
         revenue.append(sum(order.total for order in delivered_orders))
         orders.append(delivered_orders.count())
 
 
-    # Top 3 Cargos
-    top3_cargos = Cargo.objects.filter(company = request.user.company).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
+    # Top 3 orders
+    top3_orders =OrderStatus.objects.filter(company = request.user.company).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
 
-    cargo = {
-        "labels": [cargo.name for cargo in top3_cargos],
-        "data": [cargo.total_order or 0 for cargo in top3_cargos]
+    order= {
+        "labels": [order.name for order in top3_orders],
+        "data": [order.total_order or 0 for order in top3_orders]
     }
 
     #Top 3 DRIVERS
@@ -129,10 +131,10 @@ def company_report(request):
         "data": [driver.total_order for driver in top3_drivers]
     }
 
-    return render(request, 'company/report.html', {
+    return render(request, 'company/stats.html', {
         "revenue": revenue,
         "orders": orders,
-        "cargo": cargo,
+
         "driver": driver
     })
 
@@ -151,7 +153,7 @@ def company_sign_up(request):
             new_company.save()
 
             login(request, authenticate(
-                username = user_form.cleaned_data["username"],
+                user = user_form.cleaned_data["username"],
                 password = user_form.cleaned_data["password"]
             ))
 
@@ -161,22 +163,22 @@ def company_sign_up(request):
         "user_form": user_form,
         "company_form": company_form
     })
-def company_driver_sign_up(request):
-    company_form = CompanyForm()
+def driver_sign_up(request):
+    user_form = UserForm()
     driver_form = DriverForm()
 
     if request.method == "POST":
-        company_form = CompanyForm(request.POST)
+        user_form = UserForm(request.POST)
         driver_form = DriverForm(request.POST, request.FILES)
 
         if user_form.is_valid() and driver_form.is_valid():
-            new_user = Company.objects.create_user(**user_form.cleaned_data)
+            new_user = User.objects.create_user(**user_form.cleaned_data)
             new_driver = driver_form.save(commit=False)
             new_driver.user = new_user
             new_driver.save()
 
             login(request, authenticate(
-                username = user_form.cleaned_data["username"],
+                user = user_form.cleaned_data["username"],
                 password = user_form.cleaned_data["password"]
             ))
 
@@ -187,20 +189,14 @@ def company_driver_sign_up(request):
         "driver_form": driver_form
     })
 
-@login_required(login_url='/business/sign-in/')
-def b_home(request):
-    return redirect(business_home)
-def business_obtain_auth_token(request):
-    return redirect(business_home)
-@login_required(login_url='/business/sign-in/')
-def business_home(request):
-    return redirect(business_account)
-@login_required(login_url='/business/sign-in/')
-def business_account(request):
+
+
+@login_required(login_url='/company/sign-in/')
+def business_profile(request):
     user_form = UserFormForEdit(instance = request.user)
     business_form = BusinessForm(instance = request.user.business)
 
-    if request.method == "POST":
+    if request.method == "GET":
         user_form = UserFormForEdit(request.POST, instance = request.user)
         business_form = BusinessForm(request.POST, request.FILES, instance = request.user.business)
 
@@ -208,7 +204,7 @@ def business_account(request):
             user_form.save()
             business_form.save()
 
-    return render(request, 'business/account.html', {
+    return render(request, 'business/business_profile.html', {
         "user_form": user_form,
         "business_form": business_form
     })
@@ -229,8 +225,8 @@ def business_order(request):#add
         "form": form
     })
 @login_required(login_url='/business/sign-in/')
-def business_edit_order(request, cargo_id):
-    form = BusinessOrderForm(instance = Cargo.objects.get(id = cargo_id))
+def business_edit_order(request, order_id):
+    form = BusinessOrderForm(instance =BusinessOrder.objects.get(id = order_id))
 
     if request.method == "POST":
         form = BusinessOrderForm(request.POST, request.FILES, instance = BusinessOrder.objects.get(id = business_id))
@@ -253,18 +249,19 @@ def business_order_status(request):
 
     orders = OrderStatus.objects.filter(company = request.user.company).order_by("order_id")
     return render(request, 'business/orderstatus.html', {"orders": orders})
-
+@login_required(login_url='/business/sign-in/')
+def business_order(request):
+    orders = BusinessOrder.objects.filter(company = request.user.company).order_by("company_id")
+    return render(request, 'company/add_order.html', {"orders": orders})
 #@login_required(login_url='/business/sign-in/')
-#def business_account(request):
-   # cargos = Business.objects.filter(company = request.user.company).order_by("business_id")
-   # return render(request, 'business/account.html', {"cargos": cargos})
+#def business_profile(request):
+   # orders = Business.objects.filter(company = request.user.company).order_by("business_id")
+   # return render(request, 'business/profile.html', {"orders": orders})
 
-def business_current_orders(request):
-    cargos = CargoManifest.objects.filter(driver = request.user.driver).order_by("business_id")
-    return render(request, 'business/cargomanifest.html', {"cargos": cargos})
+
 
 @login_required(login_url='/business/sign-in/')
-def business_report(request):
+def business_stats(request):
     #Calculate revenue and number of orders by current week
     from datetime import datetime, timedelta
 
@@ -287,12 +284,12 @@ def business_report(request):
         orders.append(delivered_orders.count())
 
 
-    # Top 3 Cargos
-    top3_cargos = Cargo.objects.filter(business = request.user.business).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
+    # Top 3 orders
+    top3_orders = Business.order.filter(business = request.user.business).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
 
-    cargo = {
-        "labels": [cargo.name for cargo in top3_cargos],
-        "data": [cargo.total_order or 0 for cargo in top3_cargos]
+    order = {
+        "labels": [order.name for order in top3_orders],
+        "data": [order.total_order or 0 for order in top3_orders]
     }
 
     #Top 3 DRIVERS
@@ -309,10 +306,10 @@ def business_report(request):
         "data": [driver.total_order for driver in top3_drivers]
     }
 
-    return render(request, 'business/report.html', {
+    return render(request, 'business/stats.html', {
         "revenue": revenue,
         "orders": orders,
-        "cargo": cargo,
+        "order": order,
         "driver": driver
     })
 
@@ -322,7 +319,7 @@ def business_sign_up(request):
 
     if request.method == "POST":
         user_form = UserForm(request.POST)
-        business_form = BusinessForm(request.POST, request.FILES)
+        business_form = BusinessForm(request.POST, request.FILES,instance = request.user.business)
 
         if user_form.is_valid() and business_form.is_valid():
             new_user = User.objects.create_user(**user_form.cleaned_data)
@@ -331,29 +328,24 @@ def business_sign_up(request):
             new_business.save()
 
             login(request, authenticate(
-                username = user_form.cleaned_data["username"],
+                user = user_form.cleaned_data["username"],
                 password = user_form.cleaned_data["password"]
             ))
 
-            return redirect(business_home)
+            return redirect(company_home)
 
     return render(request, "business/sign_up.html", {
         "user_form": user_form,
         "business_form": business_form
     })
-def d_home(request):
-    return redirect(driver_home)
-def driver_obtain_auth_token(request):
-    return redirect(driver_home)
-@login_required(login_url='/driver/sign-in/')
-def driver_home(request):
-    return redirect(driver_account)
-@login_required(login_url='/driver/sign-in/')
-def driver_account(request):
+
+
+@login_required(login_url='/company/sign-in/')
+def driver_profile(request):
     user_form = UserFormForEdit(instance = request.user)
     driver_form = DriverForm(instance = request.user.driver)
 
-    if request.method == "POST":
+    if request.method == "GET":
         user_form = UserFormForEdit(request.POST, instance = request.user)
         driver_form = DriverForm(request.POST, request.FILES, instance = request.user.driver)
 
@@ -361,14 +353,11 @@ def driver_account(request):
             user_form.save()
             driver_form.save()
 
-    return render(request, 'driver/account.html', {
+    return render(request, 'driver/driver_profile.html', {
         "user_form": user_form,
         "driver_form": driver_form
     })
-@login_required(login_url='/driver/sign-in/')
-def driver_current_orders(request):
-    cargos = CargoManifest.objects.filter(driver = request.user.driver).order_by("driver_id")
-    return render(request, 'driver/cargomanifest.html', {"cargos": cargos})
+
 @login_required(login_url='/driver/sign-in/')
 def driver_trip(request, driver_id_id):
     form = TripForm(instance = Trip.objects.get(id = driver_id))
@@ -385,7 +374,7 @@ def driver_trip(request, driver_id_id):
     })
 @login_required(login_url='/driver/sign-in/')
 def driver_upcoming_orders(request):
-    upcoming = BusinessOrder.objects.filter(driver = request.user.driver).order_by("driver_id")
+    upcoming = BusinessBusiness.order.filter(driver = request.user.driver).order_by("driver_id")
     return render(request, 'driver/order.html', {"upcoming": upcoming})
 @login_required(login_url='/driver/sign-in/')
 def driver_stop(request):
@@ -421,8 +410,8 @@ def driver_expense(request):
     })
 
 
-@login_required(login_url='/driver/sign-in/')
-def driver_report(request):
+#@login_required(login_url='/driver/sign-in/')
+def driver_stats(request):
     #Calculate revenue and number of orders by current week
     from datetime import datetime, timedelta
 
@@ -434,9 +423,9 @@ def driver_report(request):
     current_weekdays = [today + timedelta(days = i) for i in range( 0 - today.weekday(), 7- today.weekday())]
 
     for day in current_weekdays:
-        delivered_orders = BusinessOrder.objects.filter(
+        delivered_orders = OrderStatus.objects.filter(
             driver = request.user.driver,
-            status = BusinessOrder.DELIVERED,
+            status = OrderStatus.DELIVERED,
             created_at__year = day.year,
             created_at__month = day.month,
             created_at__day = day.day
@@ -445,12 +434,12 @@ def driver_report(request):
         orders.append(delivered_orders.count())
 
 
-    # Top 3 Cargos
-    top3_cargos = Cargo.objects.filter(driver = request.user.driver).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
+    # Top 3 orders
+    top3_orders = Business.order.filter(driver = request.user.driver).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
 
-    cargo = {
-        "labels": [cargo.name for cargo in top3_cargos],
-        "data": [cargo.total_order or 0 for cargo in top3_cargos]
+    order = {
+        "labels": [order.name for order in top3_orders],
+        "data": [order.total_order or 0 for order in top3_orders]
     }
 
     #Top 3 DRIVERS
@@ -467,10 +456,9 @@ def driver_report(request):
         "data": [driver.total_order for driver in top3_drivers]
     }
 
-    return render(request, 'company/report.html', {
+    return render(request, 'driver/stats.html', {
         "revenue": revenue,
         "orders": orders,
-        "cargo": cargo,
         "driver": driver
     })
 
@@ -483,17 +471,17 @@ def driver_sign_up(request):
         driver_form = DriverForm(request.POST, request.FILES)
 
         if user_form.is_valid() and driver_form.is_valid():
-            new_user = User.objects.create_user(**user_form.cleaned_data)
+            new_user = Driver.objects.create_user(**user_form.cleaned_data)
             new_driver = driver_form.save(commit=False)
             new_driver.user = new_user
             new_driver.save()
 
             login(request, authenticate(
-                username = user_form.cleaned_data["username"],
+                user = user_form.cleaned_data["user"],
                 password = user_form.cleaned_data["password"]
             ))
 
-            return redirect(driver_home)
+            return redirect(company_home)
 
     return render(request, "driver/sign_up.html", {
         "user_form": user_form,

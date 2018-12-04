@@ -1,0 +1,21 @@
+{% extends 'base_signup.html' %}
+{% load bootstrap3 %}
+{% block title %}{{ driver.company}} Driver Break {% endblock %}
+{% block heading %}Stop: Log your Break by filling out the form below {% endblock %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% bootstrap_form stop_form %}
+
+    {{% stop_form %}}
+
+    <button type="submit" class="btn btn-pink pull-right">Null </button>
+  </form>
+
+
+<a href="{% url 'driver-trip-expense' %}">Expense Page</a>
+<a href="{% url 'driver-trip' %}">Back To Trip</a>
+<a href="{% url 'company-sign-in' %}">Log out</a>
+{% endblock %}

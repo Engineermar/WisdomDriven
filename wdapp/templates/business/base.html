@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %} business {% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            var now = new Date();
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/business/order/notification/' + now.toISOString() + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        if (data['notification'] === 0) {
+                            $('.badge').text('');
+                        } else {
+                            $('.badge').text(data['notification']);
+                        }
+                    }
+                })
+            }, 3000)
+        })
+    </script>
+{% endblock %}
+
+{% block sidebar %}
+
+    {% url 'business-order-edit' as business_order_edit_url %}
+    {% url 'business-cargo-add' as business_cargo_add_url %}
+    {% url 'business-report' as business_report_url %}
+    {% url 'business-cargo-edit' as business_cargo_edit_url %}
+    {% url 'business-order'  as business_order_url %}
+    {% url 'business-profile' as business_profile_url %}
+
+    <div class="text-center">
+      <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.business.logo }}"
+          width="70" height="70" />
+      <br/>
+      <br/>
+      <h4>Hi, {{ request.user.get_full_name }}</h4>
+      <h5>{{ request.user.business.name }}</h5>
+    </div>
+
+    <div class="list-group">
+      <span class="text-uppercase">Dashboard</span>
+      <a href="{% url 'business-order-edit' %}"
+          class="list-group-item {% if request.path == business_order_edit_url %} active {% endif %} ">
+          Edit Orders
+          <span class="badge"></span>
+      </a>
+
+      <a href="{% url 'business-order' %}"
+          class="list-group-item {% if request.path == business_order_url %} active {% endif %} ">
+          Orders
+          <span class="badge"></span>
+      </a>
+      <a href="{% url 'business-cargo' %}"
+          class="list-group-item {% if request.path == business_cargo_add_url %} active {% endif %} ">cargos</a>
+      <a href="{% url 'business-report' %}"
+          class="list-group-item {% if request.path == business_report_url %} active {% endif %} ">Reports</a>
+
+      <span class="text-uppercase">Profile</span>
+      <a href="{% url 'business-profile' %}"
+          class="list-group-item {% if request.path == business_profile_url %} active {% endif %} ">profile</a>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'business-sign-out' %}?next={{ request.path }}"
+          class="btn btn-pink">Logout</a>
+    </div>
+
+{% endblock %}
