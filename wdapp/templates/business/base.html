@@ -25,10 +25,10 @@
 
 {% block sidebar %}
 
-    {% url 'business-order-edit' as business_order_edit_url %}
-    {% url 'business-cargo-add' as business_cargo_add_url %}
-    {% url 'business-report' as business_report_url %}
-    {% url 'business-cargo-edit' as business_cargo_edit_url %}
+
+
+    {% url 'business-stats' as business_stats_url %}
+
     {% url 'business-order'  as business_order_url %}
     {% url 'business-profile' as business_profile_url %}
 
@@ -44,8 +44,8 @@
     <div class="list-group">
       <span class="text-uppercase">Dashboard</span>
       <a href="{% url 'business-order-edit' %}"
-          class="list-group-item {% if request.path == business_order_edit_url %} active {% endif %} ">
-          Edit Orders
+          class="list-group-item {% if request.path == business_stats_url %} active {% endif %} ">
+         Business Stats
           <span class="badge"></span>
       </a>
 
@@ -54,10 +54,8 @@
           Orders
           <span class="badge"></span>
       </a>
-      <a href="{% url 'business-cargo' %}"
-          class="list-group-item {% if request.path == business_cargo_add_url %} active {% endif %} ">cargos</a>
-      <a href="{% url 'business-report' %}"
-          class="list-group-item {% if request.path == business_report_url %} active {% endif %} ">Reports</a>
+
+
 
       <span class="text-uppercase">Profile</span>
       <a href="{% url 'business-profile' %}"

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from wdapp.forms import UserForm, CompanyForm, UserFormForEdit, BusinessForm, BusinessOrderForm, StopForm,DriverExpenseForm,TripForm, DriverForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from wdapp.models import OrderStatus, Driver,DriverExpense,DriverExpense,Trip,Stop,Business,BusinessOrder
+from wdapp.models import OrderStatus, Driver,DriverExpense,DriverExpense,Trip,Stop,Business,BusinessOrder,Company
 from django.db.models import Sum, Count, Case, When
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -15,19 +15,35 @@ def home(request):
 def obtain_auth_token(request):
     return redirect(company_home)
 
-def company_login(request):
-    return render(request, 'company/sign_in.html', {
-        "form": form
-    })
 
+
+
+@login_required(login_url='/company/sign-in/')
+def company_login(request):
+    return redirect(company_profile)
+
+#def company_login(request):
+    #return render(request, 'company/sign_in.html', {
+       # "form": form
+   # })
+
+@login_required(login_url='/company/sign-in/')
 def business_login(request):
-    return render(request, 'business/sign_in.html', {
-        "form": form
-    })
+    return redirect(business_profile)
+
+#def business_login(request):
+ #   return render(request, 'business/sign_in.html', {
+   #     "form": form
+  #})
+@login_required(login_url='/company/sign-in/')
 def driver_login(request):
-    return render(request, 'driver/sign_in.html', {
-        "form": form
-    })
+    return redirect(driver_profile)
+
+#def driver_login(request):
+    #return render(request, 'driver/sign_in.html', {
+      #  "form": form
+    #})
+
 def company_logout(request):
     return redirect(company_login)
 def business_logout(request):
@@ -39,8 +55,10 @@ def company_home(request):
     return redirect(company_profile)
 @login_required(login_url='/company/sign-in/')
 def company_profile(request):
+
     user_form = UserFormForEdit(instance = request.user)
     company_form = CompanyForm(instance = request.user.company)
+
 
     if request.method == "POST":
         user_form = UserFormForEdit(request.POST, instance = request.user)
@@ -51,9 +69,11 @@ def company_profile(request):
             company_form.save()
 
 
+
     return render(request, 'company/company_profile.html', {
         "user_form": user_form,
-        "company_form": company_form
+        "company_form": company_form,
+
     })
 
 
@@ -76,11 +96,14 @@ def business_add_order(request):
         "form": form
     })
 
-
+@login_required(login_url='/company/sign-in/')
+def company_employee(request):
+    drivers = Driver.objects.filter(company_id = request.user.company).order_by("company_id")
+    return render(request, 'company/employee.html', {"drivers": drivers})
 
 
 def company_current_orders(request):
-    orders = OrderStatus.objects.filter(company = request.user.company).order_by("company_id")
+    orders = BusinessOrder.objects.filter(company = request.user.company).order_by("company_id")
     return render(request, 'company/order.html', {"orders": orders})
 
 
@@ -98,11 +121,11 @@ def company_stats(request):
     print(dir(request))
     for day in current_weekdays:
         delivered_orders = BusinessOrder.objects.filter(
-            company = request.company,
-            status = OrderStatus.DELIVERED,
-            created_at__year = day.year,
-            created_at__month = day.month,
-            created_at__day = day.day
+            company = request.user.company,
+
+            order_created__year = day.year,
+            order_created__month = day.month,
+            order_created__day = day.day
         )
 
         revenue.append(sum(order.total for order in delivered_orders))
@@ -110,7 +133,7 @@ def company_stats(request):
 
 
     # Top 3 orders
-    top3_orders =OrderStatus.objects.filter(company = request.user.company).annotate(total_order = Sum('quantity')).order_by("-total_order")[:3]
+    top3_orders =BusinessOrder.objects.filter(company = request.user.company).annotate(total_order = Sum('weight')).order_by("-total_order")[:3]
 
     order= {
         "labels": [order.name for order in top3_orders],
@@ -121,7 +144,7 @@ def company_stats(request):
     top3_drivers = Driver.objects.annotate(
         total_order = Count(
             Case (
-                When(order__company = request.user.company, then = 1)
+                When(company_id__company = request.user.company, then = 1)
             )
         )
     ).order_by("-total_order")[:3]
@@ -241,18 +264,18 @@ def business_edit_order(request, order_id):
 @login_required(login_url='/business/sign-in/')
 def business_order_status(request):
     if request.method == "POST":
-        order = OrderStatus.objects.get(id = request.POST["business_id"], company = request.user.business)
+        order = BusinessOrder.objects.get(id = request.POST["business_id"], company = request.user.business)
 
-        if order.status == OrderStatus.PREPARING:
-            order.status = OrderStatus.READY
-            order.save()
+        #if order.status == BusinessOrder.PREPARING:
+            #order.status = OrderStatus.READY
+            #order.save()
 
-    orders = OrderStatus.objects.filter(company = request.user.company).order_by("order_id")
+    orders = BusinessOrder.objects.filter(company = request.user.company).order_by("order_id")
     return render(request, 'business/orderstatus.html', {"orders": orders})
 @login_required(login_url='/business/sign-in/')
 def business_order(request):
     orders = BusinessOrder.objects.filter(company = request.user.company).order_by("company_id")
-    return render(request, 'company/add_order.html', {"orders": orders})
+    return render(request, 'business/order.html', {"orders": orders})
 #@login_required(login_url='/business/sign-in/')
 #def business_profile(request):
    # orders = Business.objects.filter(company = request.user.company).order_by("business_id")
@@ -276,9 +299,9 @@ def business_stats(request):
         delivered_orders = BusinessOrder.objects.filter(
             business = request.user.Business,
             status = BusinessOrder.DELIVERED,
-            created_at__year = day.year,
-            created_at__month = day.month,
-            created_at__day = day.day
+            date_created__year = day.year,
+            date_created__month = day.month,
+            date_created__day = day.day
         )
         revenue.append(sum(order.total for order in delivered_orders))
         orders.append(delivered_orders.count())
@@ -410,7 +433,7 @@ def driver_expense(request):
     })
 
 
-#@login_required(login_url='/driver/sign-in/')
+@login_required(login_url='/driver/sign-in/')
 def driver_stats(request):
     #Calculate revenue and number of orders by current week
     from datetime import datetime, timedelta
@@ -426,9 +449,9 @@ def driver_stats(request):
         delivered_orders = OrderStatus.objects.filter(
             driver = request.user.driver,
             status = OrderStatus.DELIVERED,
-            created_at__year = day.year,
-            created_at__month = day.month,
-            created_at__day = day.day
+            date_created__year = day.year,
+            date_created__month = day.month,
+            date_created__day = day.day
         )
         revenue.append(sum(order.total for order in delivered_orders))
         orders.append(delivered_orders.count())

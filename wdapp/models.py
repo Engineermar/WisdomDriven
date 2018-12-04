@@ -42,7 +42,7 @@ class Company(models.Model): #Truck Company
     def create_profile(sender,**kwargs):
         if kwargs["created"]:
             c_profile=Company.objects.create(user=kwargs["instance"])
-            post_save.connect(create_profile,sender=User)
+        post_save.connect(create_profile,sender=User)
 
 #     def get_unique_id(self):
 #         a = self.company[:5].upper()
@@ -56,6 +56,8 @@ class Company(models.Model): #Truck Company
 #         self.company_id = self.get_unique_id()
 
 #         super(Company, self).save(*args, **kwargs)
+    def __str__(self):
+        return str(self.id)
 
     def get_company_name(self):
         return self.company
@@ -99,7 +101,7 @@ class Driver(models.Model): #Driver for the Company
     other_license_2=models.CharField(choices= LICENSE,null =True,max_length=50)
     license_number=models.IntegerField(null =True)
     date_hired=models.DateField(null =True)
-    company_id=models.ForeignKey(Company, related_name="driver_id", on_delete=models.CASCADE, null="True")
+    company_id=models.ForeignKey(Company, related_name="company_id_set", on_delete=models.CASCADE, null="True")
 
 
 
@@ -111,9 +113,9 @@ class Driver(models.Model): #Driver for the Company
         c= self.date_hired.strftime('%y')
         #First 2 letters of city
         return a + b + c
-def create_profile(sender,**kwargs):
-    if kwargs["created"]:
-        d_profile=Driver.objects.create(user=kwargs["instance"])
+    def create_profile(sender,**kwargs):
+        if kwargs["created"]:
+            d_profile=Driver.objects.create(user=kwargs["instance"])
         post_save.connect(create_profile,sender=User)
 
 
@@ -169,9 +171,9 @@ class Business(models.Model):
     business_id=models.CharField(null="True",max_length=25)
     date_established=models.DateField(max_length=500,null =True)
     logo=models.ImageField(null=True, blank=False)
-def create_profile(sender,**kwargs):
-    if kwargs["created"]:
-        b_profile=Business.objects.create(user=kwargs["instance"])
+    def create_profile(sender,**kwargs):
+        if kwargs["created"]:
+            b_profile=Business.objects.create(user=kwargs["instance"])
         post_save.connect(create_profile,sender=User)
 
 
@@ -253,14 +255,14 @@ class BusinessOrder(models.Model):#Business and Company only
     SERVICE=((PICKUP, 'pickup'),
         (DELIVERY, 'delivery'),)
     order_id=models.CharField(null=True,max_length=25)
-    order_created = models.DateField(auto_now_add=True,null =True, blank=True)
+    order_created = models.DateTimeField(auto_now_add=True,null =True, blank=True)
     business_id=models.ForeignKey(Business, related_name='b_id_set',on_delete=models.CASCADE,null =True)
-    service_type=models.CharField(choices= SERVICE, null =True, max_length=50)
+    service_type=models.IntegerField(choices= SERVICE, null =True)
     company=models.ForeignKey(Company,related_name="company_set", on_delete=models.CASCADE, null=True)
 
     weight =models.DecimalField(max_digits=10,decimal_places=2)
     distance = models.DecimalField(max_digits=10,decimal_places=2)
-    hazmat_class=models.CharField(choices= HAZMAT_CLASS,null =True, max_length=50)
+    hazmat_class=models.IntegerField(choices= HAZMAT_CLASS,null =True)
 
 #     def get_unique_id(self):
 

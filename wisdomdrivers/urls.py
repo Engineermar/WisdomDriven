@@ -11,15 +11,25 @@ urlpatterns = [
     url(r'^api-token-auth/', views.obtain_auth_token),
 #views
     # company
-    url(r'^$', views.company_login,
+    url(r'^company/sign-in/$', auth_views.login,
         {'template_name': 'company/sign_in.html'},
         name = 'company-sign-in'),
-    url(r'^company/sign-out', views.company_logout,
+    url(r'^company/sign-out', auth_views.logout,
         {'next_page': '/'},
         name = 'company-sign-out'),
     url(r'^company/sign-up', views.company_sign_up,
         name = 'company-sign-up'),
     url(r'^company/$', views.company_home, name = 'company-home'),
+    url(r'^company/employee/$', views.company_employee, name = 'company-employee'),
+    #url(r'^$', views.company_login,
+     #   {'template_name': 'company/sign_in.html'},
+      #  name = 'company-sign-in'),
+    #url(r'^company/sign-out', views.company_logout,
+     #   {'next_page': '/'},
+      #  name = 'company-sign-out'),
+    #url(r'^company/sign-up', views.company_sign_up,
+     #   name = 'company-sign-up'),
+    #url(r'^company/$', views.company_home, name = 'company-home'),
     #business
 
     #url(r'^admin/', admin.site.urls),
@@ -54,7 +64,7 @@ urlpatterns = [
     url(r'^company/company_profile/$', views.company_profile, name = 'company-profile'),
 
 
-    url(r'^company/order/$', views.business_order, name = 'company-order'),
+    url(r'^company/order/$', views.company_current_orders, name = 'company-order'),
 
     url(r'^company/stats/$', views.company_stats, name = 'company-stats'),
 

@@ -56,9 +56,9 @@ def business_get_expenditure(request):
         orders = BusinessOrder.objects.filter(
             business = business,
             status = OrderStatus.DELIVERED,
-            created_at__year = day.year,
-            created_at__month = day.month,
-            created_at__day = day.day
+            date_created__year = day.year,
+            date_created__month = day.month,
+            date_created__day = day.day
         )
 
         expenditure[day.strtime("%a")] = sum(order.total for order in orders)
@@ -107,7 +107,7 @@ def company_driver_location(request):
 
 def company_order_notification(request, last_request_time):
     notification = BusinessOrder.objects.filter(company = request.user.company,
-        created_at__gt = last_request_time).count()
+        date_created__gt = last_request_time).count()
 
     return JsonResponse({"notification": notification})
 ##GET params: access_token
@@ -127,9 +127,9 @@ def company_get_revenue(request):
         orders = BusinessOrder.objects.filter(
             company = company,
             status = OrderStatus.DELIVERED,
-            created_at__year = day.year,
-            created_at__month = day.month,
-            created_at__day = day.day
+            date_created__year = day.year,
+            date_created__month = day.month,
+            date_created__day = day.day
         )
 
         revenue[day.strtime("%a")] = sum(order.total for order in orders)
@@ -139,7 +139,7 @@ def company_get_revenue(request):
 
 def company_order_notification(request, last_request_time):
     notification = BusinessOrder.objects.filter(company = request.user.company,
-        created_at__gt = last_request_time).count()
+        date_created__gt = last_request_time).count()
 
     return JsonResponse({"notification": notification})
 ############
@@ -147,17 +147,17 @@ def company_order_notification(request, last_request_time):
 ############
 def business_order_notification(request, last_request_time):
     notification = OrderStatus.objects.filter(business = request.user.business,
-        created_at__gt = last_request_time).count()
+        date_created__gt = last_request_time).count()
     return JsonResponse({"notification": notification})
 ############
 # DRIVERS
 ############
 def driver_order_notification(request, last_request_time):
     notification = BusinessOrder.objects.filter(driver = request.user.driver,
-        created_at__gt = last_request_time).count()
+        date_created__gt = last_request_time).count()
 def driver_trip_notification(request, last_request_time):
     notification = BusinessOrder.objects.filter(driver = request.user.driver,
-        created_at__gt = last_request_time).count()
+        date_created__gt = last_request_time).count()
     return JsonResponse({"notification": notification})
 def driver_get_ready_orders(request):
     order = BusinessOrderSerializer(

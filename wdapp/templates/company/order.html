@@ -1,49 +1,48 @@
 {% extends 'company/base.html' %}
 
 {% block page %}
-
+<a href="{% url 'company-profile' %}">Company Profile</a>
+<a href="{% url 'company-stats' %}">Stats Page</a>
+<a href="{% url 'company-employee' %}">Employee page</a>
     <div class="panel">
         <div class="panel-heading bg-blue">
-            <h4 class="panel-title text-center text-white">{{ Company.company }} Orders page</h4>
+            <h4 class="panel-title text-center text-white">{{ Company.company }}  Orders History</h4>
         </div>
         <div class="panel-body">
             <br/>
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                   <tr class="bg-gray text-white">
-                    <th>business_id</th>
-                    <th>business_id Id</th>
-                    <th>Date Hired</th>
-                    <th>Sex</th>
-                    <th>Date Of Birth</th>
-                    <th>Local Address</th>
-                    <th>CDL Class</th>
-                    <th>Other CDL Class </th>
-                    <th>Wage Plan</th>
-                    <th>business_ids License Number</th>
-                    </tr>
+                    <th>Company</th>
+                    <th>Order_id</th>
+                    <th>Date Created</th>
+                    <th>Business_id</th>
+                    <th>Service Type</th>
+                    <th>Weight of Cargo</th>
+                    <th>Distance</th>
+                    <th>Hazmat Class</th>
+                    <th>Price</th>
+                  </tr>
                 </thead>
                 <tbody>
-                    {% for business_id in businesss %}
+                    {% for order in orders %}
                         <tr>
-                            <td scope="row">{{ business_id.id }}</td>
-
-                            <td>{{ business_id.name }}</td>
-                            <td>{{ business_id.business_id }}</td>
-                            <td>{{ business_id.date_hired }}</td>
-                            <td>{{ business_id.sex}}</td>
-                            <td>{{ business_id.date_of_birth }}</td>
-                            <td>{{ business_id.address }}</td>
-                            <td>{{ business_id.license }}</td>
-                            <td>{{ business_id.other_license_2 }}</td>
-                            <td>{{ business_id.wage_plan}}</td>
-                            <td>{{ business_id.license_number }}</td>
+                            <td scope="row">{{ order_id.id }}</td>
+                            <td>{{ order.company }}</td>
+                            <td>{{ order.order_id }}</td>
+                            <td>{{ order.date_created }}</td>
+                            <td>{{ order.business_id }}</td>
+                            <td>{{ order.service_type}}</td>
+                            <td>{{ order.weight }}</td>
+                            <td>{{ order.distance }}</td>
+                            <td>{{ order.hazmat_class}}</td>
+                            <td>{{ order.price }}</td>
                             <td>
 
-                                {% if business_id.wage_plan == "Hourly" %}
+                                {% if order.hazmat_class == "12" %}
                                     <form method="POST">
                                       {% csrf_token %}
-                                      <input name="id" value="{{ business_id.business_id }}" hidden>
+                                      <input name="id" value="{{ order.hazmat_class}}" hidden>
                                       <button class="btn btn-success">Ready</button>
                                     </form>
                                 {% endif %}
@@ -56,4 +55,5 @@
         </div>
     </div>
 
+<a href="{% url 'company-sign-in' %}">Log out</a>
 {% endblock %}

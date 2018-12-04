@@ -2,6 +2,10 @@
 {% load bootstrap3 %}
 
 {% block page %}
+<a href="{% url 'business-orders' %}">Orders Page</a>
+<a href="{% url 'business-report' %}">Business Statistics</a>
+<a href="{% url 'restaurant-sign-in' %}">Log out</a>
+
 <div class="col-lg-offset-2 col-lg-8">
   <div class="panel">
     <div class="panel-heading bg-blue">
@@ -14,33 +18,63 @@
       {% csrf_token %}
         <h4 class="panel-title text-center text-white">
         {{ business.business }}Business  Information
-      </h4>
+      </h4>{% extends 'company/base.html' %}
 
+{% block page %}
 
+    <div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">{{ Business.business }}  Orders History</h4>
+        </div>
+        <div class="panel-body">
+            <br/>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                  <tr class="bg-gray text-white">
+                    <th>User</th>
+                    <th>Date Established</th>
+                    <th>Business Name</th>
+                    <th>Industry</th>
+                    <th>Business_id</th>
+                    <th>Logo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for business in business_form %}
+                        <tr>
+                            <td scope="row">{{ business.buisness_id }}</td>
+                            <td>{{ business.user }}</td>
+                            <td>{{ business.date_establsihed}}</td>
+                            <td>{{ business.business }}</td>
+                            <td>{{ business.industry}}</td>
+                            <td>{{ business.business_id }}</td>
+                            <td>{{ business.logo }}</td>
+                            <td>
+                            {% if business.industry == "1" %}
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <input name="id" value="{{ business.industry}}" hidden>
+                                      <button class="btn btn-success">Ready</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-
-          {{ business.business_id }}
-          {{ business.address}}
-          {{ business.city}}
-          {{ business.state}}
-          {{ business.phone }}
-          {{ business.business_email }}
-          {{ business.industry}}
-
-                                               {{ business.business }}
-      <button type="submit" class="btn btn-pink">Update</button>
-
-      </form>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-</div>
 
-<a href="{% url 'business-orders' %}">Orders Page</a>
-<a href="{% url 'business-cargo-add' %}">Add Cargo Page</a>
-<a href="{% url 'business-cargo-edit' %}">Edit Cargo Page</a>
-<a href="{% url 'business-report' %}">Business's Statistics</a>
-<a href="{% url 'restaurant-sign-in' %}">Log out</a>
-{% endblock%}
+<a href="{% url 'company-sign-in' %}">Log out</a>
+{% endblock %}
+
+
+
+
+
+
+
 
 
 

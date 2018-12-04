@@ -1,18 +1,10 @@
-{% extends 'company/base.html' %}
+{% extends 'driver/base.html' %}
 
 {% block script %}
-    <script
-
-    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 {% endblock %}
 
 {% block page %}
-<a href="{% url 'company-profile' %}">Company Profile</a>
-<a href="{% url 'company-order' %}">Orders Page</a>
-<a href="{% url 'company-employee' %}">Employee page</a>
-
     <div class="row">
         <div class="col-lg-8">
 
@@ -20,7 +12,7 @@
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                   {{ company.company }} Revenue by Month
+                   {{ driver.name }} Expenditure by Month
                   </h4>
                 </div>
                 <div class="panel-body">
@@ -51,7 +43,7 @@
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                   {{ company.company }} Revenue by Week
+                   {{ driver.name }} Expenditure by Week
                   </h4>
                 </div>
                 <div class="panel-body">
@@ -82,7 +74,7 @@
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                   {{ company.company }} Revenue by Year
+                   {{ driver.name }} Expenditure by Year
                   </h4>
                 </div>
                 <div class="panel-body">
@@ -109,12 +101,46 @@
                     </script>
                 </div>
             </div>
+    <div class="row">
+        <div class="col-lg-8">
 
-            <!-- Orders by Week -->
+            <!-- Revenue by Week -->
             <div class="panel">
                 <div class="panel-heading bg-blue">
                   <h4 class="panel-title text-center text-white">
-                      Order by Week
+                      Trips by Month
+                  </h4>
+                </div>
+                <div class="panel-body">
+                    <canvas id="revenueChart" height="110"></canvas>
+                    <script>
+                        var ctx = document.getElementById("revenueChart").getContext("2d");
+                        var data = {
+                             labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sept", "Oct", "Nov", "Dec"],
+                            datasets: [
+                                {
+                                    label: "Revenue by Week",
+                                    backgroundColor: "rgba(54,162,235,0.9)",
+                                    hoverBackgroundColor: "rgba(54,162,235,1)",
+                                    data: {{ revenue }}
+                                }
+                            ]
+                        };
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: data
+                        });
+
+                    </script>
+                </div>
+            </div>
+
+            <!-- Miless by Week -->
+            <div class="panel">
+                <div class="panel-heading bg-blue">
+                  <h4 class="panel-title text-center text-white">
+                      Miles by Week
                   </h4>
                 </div>
                 <div class="panel-body">
@@ -122,13 +148,13 @@
                     <script>
                         var ctx = document.getElementById("orderChart").getContext("2d");
                         var data = {
-                            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sept", "Oct", "Nov", "Dec"],
                             datasets: [
                                 {
                                     label: "Revenue by Week",
                                     backgroundColor: "rgba(255,99,132,0.9)",
                                     hoverBackgroundColor: "rgba(255,99,132,1)",
-                                    data: {{ companyOrders }}
+                                    data: {{ orders }}
                                 }
                             ]
                         };
@@ -146,25 +172,25 @@
         </div>
         <div class="col-lg-4">
 
-          <!-- TOP 3 orders -->
+          <!-- TOP 3 cargos -->
           <div class="panel">
               <div class="panel-heading bg-blue">
                 <h4 class="panel-title text-center text-white">
-                    {{ company.name }} orders Transport
+                    Top 3 cargos
                 </h4>
               </div>
               <div class="panel-body">
-                  <canvas id="orderChart" height="242"></canvas>
+                  <canvas id="cargoChart" height="242"></canvas>
                   <script>
-                      var ctx = document.getElementById("orderChart").getContext("2d");
+                      var ctx = document.getElementById("cargoChart").getContext("2d");
                       var data = {
-                          labels: {{ order.labels|safe }},
+                          labels: {{ cargo.labels|safe }},
                           datasets: [
                               {
                                   backgroundColor: [
                                     "#36A2EB", "#FFCE56", "#FF6384"
                                   ],
-                                  data: {{ order.data }}
+                                  data: {{ cargo.data }}
                               }
                           ]
                       };
@@ -177,42 +203,12 @@
                   </script>
               </div>
           </div>
-         <!-- TOP 10 company -->
-          <div class="panel">
-              <div class="panel-heading bg-blue">
-                <h4 class="panel-title text-center text-white">
-                  Top company by Revenue at {{ company.name }}
-                </h4>
-              </div>
-              <div class="panel-body">
-                  <canvas id="orderChart" height="242"></canvas>
-                  <script>
-                      var ctx = document.getElementById("companyChart").getContext("2d");
-                      var data = {
-                          labels: {{ company.labels|safe }},
-                          datasets: [
-                              {
-                                  backgroundColor: [
-                                    "#36A2EB", "#FFCE56", "#FF6384"
-                                  ],
-                                  data: {{ company.data }}
-                              }
-                          ]
-                      };
 
-                      new Chart(ctx, {
-                        type: 'pie',
-                        data: data
-                      });
-
-                  </script>
-              </div>
-          </div>
           <!-- TOP 3 Driver ALL TIME -->
           <div class="panel">
               <div class="panel-heading bg-blue">
                 <h4 class="panel-title text-center text-white">
-                    Top Drivers at {{ company.name }}
+                    Top 3 Drivers
                 </h4>
               </div>
               <div class="panel-body">
@@ -241,7 +237,5 @@
           </div>
         </div>
     </div>
-
-
 <a href="{% url 'company-sign-in' %}">Log out</a>
 {% endblock %}

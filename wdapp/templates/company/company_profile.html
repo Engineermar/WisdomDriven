@@ -8,20 +8,86 @@
       <h4 class="panel-title text-center text-white">
         Company Profile
       </h4>
+       <a href="{% url 'company-stats' %}">Stats</a>
+       <a href="{% url 'company-order' %}">Orders </a>
+       <a href="{% url 'company-employee' %}">Employees</a>
+
     </div>
     <div class="panel-body">
       <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-        <h4 class="panel-title text-center text-white">
-        {{ company.company}}  Information
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Email
       </h4>
-          {{ company.company_id }}
-          {{ company.date_established}}
-          {{ company.user }}
-      </form>
     </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form user_form %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Brief Company Information
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {% bootstrap_form company_form %}
+
+     </div>
   </div>
 </div>
+<div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">{{ Company.company }}  Company Info</h4>
+        </div>
+        <div class="panel-body">
+            <br/>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                  <tr class="bg-gray text-white">
+                    <th>Company</th>
+                    <th>company_id</th>
+                    <th>Date Established</th>
+                    <th>Industry</th>
+                    <th>Date of Birth</th>
+                    <th>Logo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for company in company_form %}
+                        <tr>
+                            <td scope="row">{{ company.company_id }}</td>
+                            <td>{{ company.company }}</td>
+                            <td>{{ company.company_id }}</td>
+                            <td>{{ company.company_id }}</td>
+                            <td>{{ company.date_established }}</td>
+                            <td>{{ company.industry }}</td>
+                            <td>{{ company.logo}}</td>
+                            <td>
+
+                                {% if company.logo == True %}
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <input name="id" value="{{ company.logo}}" hidden>
+                                      <button class="btn btn-success">Ready</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+<a href="{% url 'company-sign-in' %}">Log out</a>
 {% endblock%}
 
 
