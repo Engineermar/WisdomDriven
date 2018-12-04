@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3b(o-u4_!y_c+mw!19gg)(xz75un=@0=#_49n%c8h-1d2edfw='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 1
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+#GOOGLE_MAPS_API_KEY =
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,20 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wdapp',
-    'budgetapp',
-    #'oauth2_provider',
-    
+    'django_extensions',
+
+
+
+
+
     'rest_framework.authtoken',
     'bootstrap3',
     # 3rd Party Apps
-    'rest_framework',
+    'rest_framework'
     #'generic_relations',
     # My Apps
     #'wdapp.apps.LeadsConfig',
     #'callbacks.apps.CallbacksConfig',
     #'notes.apps.NotesConfig',
-   
-    
+
+
 ]
 
 REST_FRAMEWORK = {
@@ -88,7 +91,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                
+
             ],
         },
     },
@@ -157,11 +160,9 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
 AUTHENTICATION_BACKENDS = (
-    
-   
+
+
    'django.contrib.auth.backends.ModelBackend',
 )
 
-
 STRIPE_API_KEY = 'pk_test_7wOdptpr7OTnQLa1nuYByQ1Q'
-
