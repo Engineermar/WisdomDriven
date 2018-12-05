@@ -22,7 +22,7 @@ class CompanyFactory(factory.django.DjangoModelFactory):
                                         'Pitney Bowes Inc.', 'Teradyne Inc', 'BAmerica Corporation', 'Tower Auto Inc.', 'Timken Company',
                                         'The  Company', 'Rock-Tenn Co', 'Ent Corporation', 'Phar Corp', 'International Corp.', 'Mobil oration'])
     trucking_specilization = factory.fuzzy.FuzzyInteger(1, 7)
-    date_established = factory.fuzzy.FuzzyDate( datetime.date(2008, 1, 1), datetime.date(2018, 12, 31) )
+    date_established = factory.fuzzy.FuzzyDate( datetime.date(2007, 1, 1), datetime.date(2018, 11, 31) )
     logo = "www.gravatar.com/avatar/55ea9a364c96f4fea387d393f02b8812"
 
 
@@ -34,7 +34,7 @@ class BusinessFactory(factory.django.DjangoModelFactory):
     business = factory.Sequence(lambda n: 'business%d' % n)
     industry = factory.fuzzy.FuzzyInteger(1, 7)
     business_id = factory.Sequence(lambda n: 'busi_%d' % n)
-    date_established = factory.fuzzy.FuzzyDate( datetime.date(2008, 1, 1), datetime.date(2018, 12, 31) )
+    date_established = factory.fuzzy.FuzzyDate( datetime.date(2007, 1, 1), datetime.date(2018, 11, 31) )
     logo = "www.gravatar.com/avatar/55ea9a364c96f4fea387d393f02b8812"
 
 class DriverFactory(factory.django.DjangoModelFactory):
@@ -43,14 +43,14 @@ class DriverFactory(factory.django.DjangoModelFactory):
 
     driver_id = factory.Sequence(lambda n: 'driver%d' % n)
     user = factory.SubFactory(UserFactory)
-    date_of_birth = factory.fuzzy.FuzzyDate( datetime.date(1956, 1, 1), datetime.date(1999, 12, 31) )
+    date_of_birth = factory.fuzzy.FuzzyDate( datetime.date(1950, 1, 1), datetime.date(1986, 12, 31) )
     ssn=factory.Sequence(lambda n: '123-555-%04d' % n)
     wage_plan = factory.fuzzy.FuzzyInteger(1, 2)
     license = factory.fuzzy.FuzzyInteger(1, 3)
     other_license = factory.fuzzy.FuzzyInteger(1, 3)
     other_license_2 = factory.fuzzy.FuzzyInteger(1, 3)
     license_number = factory.Sequence(lambda n: '364232%04d' % n)
-    date_hired = factory.fuzzy.FuzzyDate( datetime.date(1990, 1, 1), datetime.date(2018, 11, 30) )
+    #date_hired = factory.fuzzy.FuzzyDate( datetime.date(1990, 1, 1), datetime.date(2018, 11, 30) )
     company = factory.Iterator(Company.objects.all())
 
 class BusinessOrderFactory(factory.django.DjangoModelFactory):
@@ -90,7 +90,7 @@ class TripFactory(factory.django.DjangoModelFactory): #Driver and Company
     ending_weather_conditions = factory.fuzzy.FuzzyInteger(1, 6)
     fuel_card_usage = factory.fuzzy.FuzzyInteger(1, 2)
     average_price_per_gallon = factory.fuzzy.FuzzyDecimal(2.0, 4.50)
-    gallons_of_gas_used = factory.fuzzy.FuzzyInteger(2, 4)
+    gallons_of_gas_used = factory.fuzzy.FuzzyInteger(20, 150)
     number_of_unscheduled = factory.fuzzy.FuzzyInteger(100, 1000)
     total_miles_traveled = factory.fuzzy.FuzzyDecimal(1.0, 1000.0)
     order_details = factory.Sequence(lambda n: 'orderdetail%d' % n)
