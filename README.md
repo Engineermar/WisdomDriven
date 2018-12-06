@@ -1,8 +1,9 @@
 # Wisdom Driven Project
-# ITA-VT Data Analytics Program
-# Web Applications with DJango and Python
-# Fall 2018
-## Get started
+## ITA-VT Data Analytics Program
+##Web Applications with DJango and Python
+##Fall 2018
+####Get started
+![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
 -We are using Django 1.10 for this application 
 -via Online IDE Sourcelair.com
 
@@ -18,7 +19,8 @@
 
 
 ## Phase 1 Develoment Images
-![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/homepage.JPG
+![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
+![Pic 2](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/homepage.JPG
       )
 
 ---
