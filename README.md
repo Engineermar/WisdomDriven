@@ -6,19 +6,21 @@
 -We are using Django 1.10 for this application 
 -via Online IDE Sourcelair.com
 <p align="center">
-Instructions:
+<i>Instructions:
 -pip install -r requirements.txt
 -python manage.py makemigrations
 -python manage.py migrate
 -python manage.py createsuperuser
--python manage.py runserver </p>
+-python manage.py runserver</i> </p>
 
 
 
 
 
 ## Phase 1 Develoment Images
-![GitHub Logo](images/logo.png)
+![Pic 1](
+        WisdomDriven/Production Images/09F73F7F-68D3-4CE4-A928-32A4F530FA7B.jpeg
+      )
 
 ---
 
