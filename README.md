@@ -1,10 +1,10 @@
-<dt># Wisdom Driven Application</dt> 
+<h> Wisdom Driven Application</h> 
 # ITA-VT Data Analytics Program
-##### Web Applications with DJango and Python
-###### Fall 2018
-###### Developers: Lamar L. , Augustine M. Greg A.
+## Web Applications with DJango and Python
+### Fall 2018
+#### Developers: Lamar L. , Augustine M. Greg A.
 ![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
-###### Get started
+##### Get started
 
 ##### Django Version Django 1.10 
 ##### via Online IDE Sourcelair.com
