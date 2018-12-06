@@ -1,5 +1,5 @@
-<dt>Wisdom Driven Application</dt> 
-#### ITA-VT Data Analytics Program
+<dt># Wisdom Driven Application</dt> 
+# ITA-VT Data Analytics Program
 ##### Web Applications with DJango and Python
 ###### Fall 2018
 ###### Developers: Lamar L. , Augustine M. Greg A.
