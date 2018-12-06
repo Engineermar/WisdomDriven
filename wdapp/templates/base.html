@@ -1,30 +1,68 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{% block title %}{% endblock %}</title>
+{% extends 'templates/main/base.html' %}
 
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block title %} Company {% endblock %}
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            var now = new Date();
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/company/order/notification/' + now.toISOString() + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        if (data['notification'] === 0) {
+                            $('.badge').text('');
+                        } else {
+                            $('.badge').text(data['notification']);
+                        }
+                    }
+                })
+            }, 3000)
+        })
+    </script>
+{% endblock %}
 
-  {% block script %}{% endblock %}
-</head>
-<body>
+{% block sidebar %}
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-2 sidebar">
-            {% block sidebar %}{% endblock %}
-        </div>
-        <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 content">
-            {% block page %}{% endblock %}
-        </div>
-      </div>
+
+    
+
+    {% url 'main-sign-in' as main_sign_in_url %}
+    {% url 'company-employee' as company_employee_url %}
+    {% url 'company-profile' as company_profile_url %}
+    {% url 'company-stats' as company_stats_url %}
+    <div class="text-center">
+      <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.company.logo }}"
+          width="70" height="70" />
+      <br/>
+      <br/>
+      <h4>Hi, {{ request.user.company.company }}</h4>
+      <h5>{{ request.user.company.name }}</h5>
     </div>
 
-</body>
-</html>
+    <div class="list-group">
+      <span class="text-uppercase">Dashboard</span>
+
+
+
+
+      <a href="{% url 'company-order' %}"
+          class="list-group-item {% if request.path == company_order_url %} active {% endif %} ">{{ request.user.company.company }} Orders</a>
+
+
+
+      <a href="{% url 'company-employee' %}"
+          class="list-group-item {% if request.path == company_employee_url %} active {% endif %} ">{{ request.user.company.company }} Employees</a>
+      <a href="{% url 'company-stats' %}"
+          class="list-group-item {% if request.path == company_stats_url %} active {% endif %} ">{{ request.user.company.company }} Statistics</a>
+      <div class="text-center">
+      <a href="{% url 'company-sign-out' %}?next={{ request.path }}"
+          class="btn btn-pink">Logout</a>
+         </div>
+    </div>
+
+
+
+
+{% endblock %}

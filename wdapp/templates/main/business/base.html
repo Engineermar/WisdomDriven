@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'templates/main/base.html' %}
 
 {% block title %} business {% endblock %}
 
@@ -67,7 +67,7 @@
     </div>
 
     <div class="text-center">
-      <a href="{% url 'main-sign-out' %}?next={{ request.path }}"
+      <a href="{% url 'company-sign-out' %}?next={{ request.path }}"
           class="btn btn-pink">Logout</a>
     </div>
 

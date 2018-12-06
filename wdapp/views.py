@@ -11,12 +11,12 @@ from django.views.generic.base import TemplateView
 def home(request):
     template_name = 'main/home.html'
     return render(request,template_name)
-#def bhome(request):
- #   return redirect(home)
-##def chome(request):
-  #  return redirect(home)
-#def dhome(request):
-  #  return redirect(home)
+def bhome(request):
+    return redirect(home)
+def chome(request):
+    return redirect(home)
+def dhome(request):
+    return redirect(home)
 def obtain_auth_token(request):
     return redirect(main_home)
 def company_obtain_auth_token(request):
@@ -194,7 +194,7 @@ def company_sign_up(request):
                 password = user_form.cleaned_data["password"]
             ))
 
-            return redirect(company_profile)
+            return redirect(company_home)
 
     return render(request, "main/company/sign_up.html", {
         "user_form": user_form,
@@ -219,7 +219,7 @@ def business_sign_up(request):
                 password = user_form.cleaned_data["password"]
             ))
 
-            return redirect(business_profile)
+            return redirect(business_home)
     return render(request, "main/business/sign_up.html", {
         "user_form": user_form,
         "business_form": business_form
@@ -243,7 +243,7 @@ def driver_sign_up(request):
                 password = user_form.cleaned_data["password"]
             ))
            
-            return redirect(driver_profile)
+            return redirect(driver_home)
 
     return render(request, "main/driver/sign_up.html", {
         "user_form": user_form,
