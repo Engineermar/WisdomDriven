@@ -1,4 +1,4 @@
-# Wisdom Driven Application
+<dt>Wisdom Driven Application</dt> 
 #### ITA-VT Data Analytics Program
 ##### Web Applications with DJango and Python
 ###### Fall 2018
@@ -21,7 +21,6 @@
 
 
 ###### Phase 1 Develoment Images
-![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
 ![Pic 2](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/homepage.JPG
       )
 
