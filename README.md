@@ -22,10 +22,10 @@
 
 
 
-###### Phase 1 Develoment Images
+###### Phase 1 Home Page
 ![Pic 2](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/homepage.JPG
       )
-
+https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/1E8002DC-C3B6-4D1E-A2E3-85FD49462C85.png)
 ---
 
 <p align="center">
