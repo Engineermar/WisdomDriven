@@ -1,14 +1,26 @@
-<h> Wisdom Driven Application</h> 
-# ITA-VT Data Analytics Program
-## Web Applications with DJango and Python
-### Fall 2018
-#### Developers: Lamar L. , Augustine M. Greg A.
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wisdom Driven's: Web Based Delivery Optimization/Analytical system </title>
+</head>
+
+<body>
+<p> Developers: Lamar L. , Augustine M. Greg A.</p>
+<p>ITA-VT Data Analytics Program</p> 
+<p> Web Applications with DJango and Python</p>
+<p> Fall 2018 </p>
+The content of the document......
+</body>
+</html>
+
+
+
+
+
 ![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
-##### Get started
-
-##### Django Version Django 1.10 
-##### via Online IDE Sourcelair.com
-
+## Get started
+### Django Version Django 1.10 
+### via Online IDE Sourcelair.com
 ##### Instructions:
 ###### pip install -r requirements.txt
 ###### python manage.py makemigrations
