@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+<body>
+
+<!-- Navigation -->
+<nav class="w3-bar w3-black">
+
+ <a href="{% url 'company-sign-up' %}" class="w3-button w3-bar-item"> Become a Company</a>
+ <a href="{% url 'business-sign-up' %}" class="w3-button w3-bar-item">Become a Business</a>
+ <a href="{% url 'driver-sign-up' %}" class="w3-button w3-bar-item">Become an associated Driver</a>
+ <a href="{% url 'main-sign-in' %}" class="w3-button w3-bar-item"> Sign in</a>
+ <a href="{% url 'main-about' %}" class="w3-button w3-bar-item"> About Wisdom Drivers</a>
+  <header class="w3-container w3-purple">
+  <h1>Wisdom Drivers : Linking Transportation with Innovations </h1>
+
+<img src=  "{% static "images/wdfakelogo.jpg"%}"  style="width:100%">
+</header>
+    <p> Wisdom Drivers Mission Statement: Were dedicated to provide the highest quality technology-based services, in the most cost-effective manner, to facilitate the College mission as it applies to the management, teaching, learning, and community service.</p>    
+
+<div class="w3-container">
+  
+
+</nav>
+
+</body>
+</html>
+
