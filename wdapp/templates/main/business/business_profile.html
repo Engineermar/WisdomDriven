@@ -1,0 +1,55 @@
+{% extends 'business/base.html' %}
+{% load bootstrap3 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Business Profile
+      </h4>
+
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+<div class="col-lg-offset-2 col-lg-8">
+  <div class="panel">
+    <div class="panel-heading bg-blue">
+      <h4 class="panel-title text-center text-white">
+        Basic Information
+      </h4>
+    </div>
+    <div class="panel-body">
+      <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form business_form %}
+<div class="col-lg-offset-2 col-lg-8">
+   <br/>
+         <table class="table table-bordered table-striped">
+                <thead>
+                  <tr class="bg-gray text-white">
+                    <th>business_id</th>
+                    <th>Industry</th>
+                    <th>Join Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for business in business_form %}
+                        <tr>
+                            <td scope="columns">{{ business.business }}</td>
+                            <td>{{ business.business_id }}</td>
+                            <td>{{ business.date_established }}</td>
+                            <td>{{ business.industry }}</td>
+                         </td>
+
+                    {% endfor %}
+
+                  </tbody>
+            </table>
+        </div>
+
+
+{% endblock%}
+
+

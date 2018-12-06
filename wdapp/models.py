@@ -13,6 +13,13 @@ import os
 import sys
 import csv
 from datetime import timedelta
+from peewee import *
+from rest_framework.authtoken.models import Token
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 class Company(models.Model): #Truck Company
 
 
@@ -33,16 +40,26 @@ class Company(models.Model): #Truck Company
         (OTHER,'other'),
         )
     company_id=models.CharField(null="True",max_length=9)
-    user = models.OneToOneField(User,related_name='company', on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,related_name='company', on_delete=models.CASCADE, null=True)
     company = models.CharField(max_length=500,null =True)
     trucking_specilization=models.CharField(choices= INDUSTRY,null =True, max_length=50)
     date_established=models.DateField(max_length=500,null =True)
     logo=models.ImageField(null=True, blank=False)
+    def __str__(self):
+        return self.company
+    def get_company_id(self):
+        return self.company_id
+    def get_trucking_specilization(self):
+         return self.get_trucking_specilization
+    def get_company_logo(self):
+        return self.logo
 
-    def create_profile(sender,**kwargs):
-        if kwargs["created"]:
-            c_profile=Company.objects.create(user=kwargs["instance"])
-        post_save.connect(create_profile,sender=User)
+#def create_profile(sender,**kwargs):
+ #   if kwargs["created"]:
+  #      c_profile=Company.objects.create(user=kwargs["instance"])
+#post_save.connect(create_profile,sender=User)
+   # def __str__(self):
+     #   return str(self.id)
 
 #     def get_unique_id(self):
 #         a = self.company[:5].upper()
@@ -56,20 +73,10 @@ class Company(models.Model): #Truck Company
 #         self.company_id = self.get_unique_id()
 
 #         super(Company, self).save(*args, **kwargs)
-    def __str__(self):
-        return str(self.id)
+    #def __str__(self):
+    #    return str(self.id)
 
-    def get_company_name(self):
-        return self.company
-    def get_company_id(self):
-        return self.company_id
-    def get_trucking_specilization(self):
-         return self.get_trucking_specilization
-    def get_company_logo(self):
-        return self.logo
 
-    def __str__(self):
-        return '%s_%s' % (self.company_id, self.company)
 
 
 class Driver(models.Model): #Driver for the Company
@@ -99,53 +106,44 @@ class Driver(models.Model): #Driver for the Company
     license=models.CharField(choices= LICENSE,null =True,max_length=50)
     other_license=models.CharField(choices= LICENSE,null =True,max_length=50)
     other_license_2=models.CharField(choices= LICENSE,null =True,max_length=50)
-    license_number=models.IntegerField(null =True)
+    license_number=models.CharField(null =True, max_length=8)
     date_hired=models.DateField(null =True)
     company_id=models.ForeignKey(Company, related_name="company_id_set", on_delete=models.CASCADE, null="True")
-
-
-
-    #timeempl=models.IntegerField(null =True)
-
-    def get_unique_id(self):
-        a = self.ssn[4:].lower()
-        b = self.wage_plan[:3].upper()
-        c= self.date_hired.strftime('%y')
-        #First 2 letters of city
-        return a + b + c
-    def create_profile(sender,**kwargs):
-        if kwargs["created"]:
-            d_profile=Driver.objects.create(user=kwargs["instance"])
-        post_save.connect(create_profile,sender=User)
-
-
-
-
+   # def __str__(self):
+    #    return str(self.id)
     def drivers_name(self):
         return self.name
     def get_driver_license_number(self):
-        return self.driver_id
+        return self.license_number
     def get_driver_date_of_hire(self):
 
          return self.date_hired
 
 
 
+   #def __str__(self):
+       # return self.user
     def get_drivers_social_security(self):
          return self.ssn
     def get_drivers_wage_plan(self):
         return self.wage_plan
     def __str__(self):
         return '%s' % (self.driver_id)
+#def create_profile(sender,**kwargs):
+ #   if kwargs["created"]:
+  #      d_profile=Driver.objects.create(user=kwargs["instance"])
+#post_save.connect(create_profile,sender=User)
+
+    #timeempl=models.IntegerField(null =True)
 
 
 
 
 
-    def save(self, *args, **kwargs):
-        self.driver_id = self.get_unique_id()
 
-        super(Driver, self).save(*args, **kwargs)
+
+
+
 
 class Business(models.Model):
     FUEL = 1
@@ -167,46 +165,27 @@ class Business(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='business',null=True)
     business = models.CharField(max_length=150, db_index=True)
-    industry = models.CharField(choices= INDUSTRY, null =True, max_length=50)
+    industry = models.IntegerField(choices= INDUSTRY, null =True)
     business_id=models.CharField(null="True",max_length=25)
     date_established=models.DateField(max_length=500,null =True)
     logo=models.ImageField(null=True, blank=False)
-    def create_profile(sender,**kwargs):
-        if kwargs["created"]:
-            b_profile=Business.objects.create(user=kwargs["instance"])
-        post_save.connect(create_profile,sender=User)
+    #def __str__(self):
+      #  return str(self.id)
 
-
-
-
-
-
-
-    def get_unique_id(self):
-        a=  self.business[:4].upper()
-        b=  self.user[:3].upper()
-        c=  self.industry[:2].upper()
-
-        return a + b + c
-
-
-
-
-    def get_business_name(self):
-        return self.name
+    def __str__(self):
+        return self.business
     def get_business_id(self):
         return self.business_id
     def get_point_of_contact(self):
         return self.point_of_contact
     def get_other_details(self):
         return self.other_details
-    def __str__(self):
-        return '%s' % (self.business_id)
-
-
-
-
-
+   # def __str__(self):
+        #return '%s' % (self.business_id)
+#def create_profile(sender,**kwargs):
+ #   if kwargs["created"]:
+  #      b_profile=Business.objects.create(user=kwargs["instance"])
+#post_save.connect(create_profile,sender=User)
 class BusinessOrder(models.Model):#Business and Company only
     MONDAY = 1
     TUESDAY = 2
@@ -235,7 +214,7 @@ class BusinessOrder(models.Model):#Business and Company only
     OXIDIZER=10
     TOXIC = 11
     RADIOACTIVE = 12
-    MISC= models.TextField(blank=True)
+    MISC= 0
     HAZMAT_CLASS = (
         (NON_HAZARDOUS, 'Non-hazard'),
         (EXPLOSIVE, 'Explosive'),
@@ -255,12 +234,10 @@ class BusinessOrder(models.Model):#Business and Company only
     SERVICE=((PICKUP, 'pickup'),
         (DELIVERY, 'delivery'),)
     order_id=models.CharField(null=True,max_length=25)
-    order_created = models.DateTimeField(auto_now_add=True,null =True, blank=True)
-    business_id=models.ForeignKey(Business, related_name='b_id_set',on_delete=models.CASCADE,null =True)
+    order_created = models.DateTimeField(auto_now_add=True, null =True, blank=True)
+    business=models.ForeignKey(Business)
     service_type=models.IntegerField(choices= SERVICE, null =True)
-    company=models.ForeignKey(Company,related_name="company_set", on_delete=models.CASCADE, null=True)
-
-    weight =models.DecimalField(max_digits=10,decimal_places=2)
+    company=models.ForeignKey(Company)
     distance = models.DecimalField(max_digits=10,decimal_places=2)
     hazmat_class=models.IntegerField(choices= HAZMAT_CLASS,null =True)
 
@@ -276,8 +253,8 @@ class BusinessOrder(models.Model):#Business and Company only
 
 #         super(BusinessOrder, self).save(*args, **kwargs)
 
-    def get_business_id(self):
-        return self.business_id
+    def get_business(self):
+        return self.business
     def get_service_type(self):
         return self.service_type
 
@@ -302,15 +279,10 @@ class BusinessOrder(models.Model):#Business and Company only
             return get_price_by_weight(self)* 3.25
 
 
-    def __str__(self):
-        return '%s' % (self.order_id)
-
-
-
-
-
-
-
+   # def __str__(self):
+        #return '%s' % (self.order_id)
+   # def __str__(self):
+      #  return str(self.id)
 class Trip(models.Model): #Driver and Company
     NORMAL = 1
     CLOUDY = 2
@@ -356,8 +328,8 @@ class Trip(models.Model): #Driver and Company
     def __str__(self):
         return '%s' % (self.trip_id)
 
-
-
+   # def __str__(self):
+   #     return str(self.id)
 class OrderStatus(models.Model): # Delivery or Trucking company handles this . Company,Driver and Representative can see this!
     #DYNAMIC INFORMATION: limited usage of "_id". This view is for the Business(customer) Specifcally.
     PREPARING = 1
@@ -397,7 +369,8 @@ class OrderStatus(models.Model): # Delivery or Trucking company handles this . C
     def __str__(self):
         return '%s' % (self.order_id)
 
-
+    #def __str__(self):
+     #   return str(self.id)
 
 
 
@@ -444,6 +417,8 @@ class Stop(models.Model): #Driver and Company only
 
     def __str__(self):
         return '%s' % (self.stop_id)
+    #def __str__(self):
+     #   return str(self.id)
 
 
 class DriverExpense(models.Model): #Driver and Company only
@@ -479,6 +454,8 @@ class DriverExpense(models.Model): #Driver and Company only
 
     def __str__(self):
         return '%s' % (self.expenses_id)
+    #def __str__(self):
+     #   return str(self.id)
 
 
 

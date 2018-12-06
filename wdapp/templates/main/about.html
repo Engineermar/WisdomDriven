@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<header class="w3-container w3-purple">
+  <h1>About us</h1>
+  <a href="{% url 'main-home' %}" class="w3-button w3-bar-item">Back to Home</a>
+</header>
+
+<img src=  "{% static "images/18wheeler.jpg"%}"  style="width:100%">
+
+<div class="w3-container">
+  <p>Our mission is simple: make technology an asset for your business not a problem. Too many times we have seen other IT consulting firms recommend solutions that are not appropriate for the specific client’s business or will not take a business’ operations into their planning as they routinely bring down an entire business while they perform routine maintenance on a server. That is unacceptable. We won’t bring you down in the middle of the day because it is “a better time for us”. We work around your business. We strive to make technology integrate seamlessly with your business so your business can grow. As your technology partner, when your business grows ours will grow with you, therefore, we will work hand in hand with you to support your growth.</p>  
+    
+    
+    
+    <p>Our Mission
+Diligent's mission is to become the preferred transportation and logistics service provider. Our mission will be achieved by building strong relationships with individuals and companies, that share our core values.
+  
+
+Our Vision
+Diligent is dedicated to partnering with our customers to achieve their delivery goals by providing:
+
+Customized solutions uniquely designed to meet customer needs.
+The highest level of dependable and reliable transportation services.</p>
+
+  <table class="w3-table w3-bordered w3-striped">
+    <thead>
+      <tr>
+        <th>Team @ Wisdom Drivers</th>
+      
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+          
+        <td>Augustine Masikonde</td>
+        <td>Student@Virgina Tech Data Anlytics Progran </td>
+        <td>Project Role:Developer/Business Rep/Modeling</td>
+      </tr>
+        <tr>
+        <th>Lamar Lyons</th>
+        <th>Electrical Engineer/Student@Virgina Tech Data Anlytics Progran and Georgia Tech (M.S. Computer Science specilization Interactive Intellegence)</th>
+        <th>Project Role: Developer/Design/Machine Learning Enthusiast</th>
+      </tr>
+      <tr>
+        <td>Greg</td>
+        <td>Student@Virgina Tech Data Anlytics Progran</td>
+        <td>Project Role: Developer/Business Rep</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="w3-row-padding w3-margin-top">
+  <div class="w3-half">
+    <div class="w3-card">
+      <img src="{% static "images/truck.png" %}" style="width:100%">
+      <div class="w3-container">
+        <p>Trucking</p>
+        <p>The field of analytics is driving changes in Freight Transportation.
+          The machine learning algorithms that are being created to solve important business problems for fleets use data to answer complex problems ranging from fraud to fuel spend benchmarking and optimization, Wisdom Drivers</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-half">
+    <div class="w3-card">
+      <img src="{% static "images/local_delivery.jpg" %}"style="width:100%">
+      <div class="w3-container">
+        <p>Local Delivery</p>
+        <p> Wisdom Drivers,is in the marketplace for business catering, launched Our first "Wisdom Driven" Application, a new offering that connects restaurants and caterers to third-party delivery companies in their area. The service meets the delivery and set up standards required for business catering orders. Every Our first "Wisdom Driven" Application delivery partner is vetted and tested to ensure reliability and professionalism. Our first "Wisdom Driven" Application is currently available in 50 major markets including Chicago, Los Angeles, San Francisco and Washington D.C. Wisdom Drivers plans to expand the service to 100 markets by the end of the year. </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="w3-container w3-purple w3-margin-top">
+  <h5>Wisdom Driven</h5>
+  <p>Linking Transportation with innovations</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends 'base_signup.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Wisdom Drivers{% endblock %}
+{% block heading %}Driver - Registration {% endblock %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% block footer %} Are You Driver that works for an associated Company? {% endblock %} 
+    {% bootstrap_form user_form %}
+    {% bootstrap_form driver_form %}
+
+
+    <button type="submit" class="btn btn-pink pull-right">Sign Up</button>
+  </form>
+
+  <a href="{% url 'main-sign-in' %}">Already have an account?</a>
+{% endblock %}

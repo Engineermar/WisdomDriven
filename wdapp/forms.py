@@ -27,7 +27,7 @@ class CompanyForm(forms.ModelForm):
 class DriverForm(forms.ModelForm):
     class Meta:
         model = Driver
-        exclude = ['company_id','user','driver_id']
+        exclude = ['company_id','driver_id',"user"]
         #fields = '__all__'("name", "phone", "address", )#"logo")
 class BusinessForm(forms.ModelForm):
     class Meta:
@@ -54,7 +54,7 @@ class BusinessOrderForm(forms.ModelForm):
     class Meta:
         model = BusinessOrder
 
-        exclude = ['business_id','order_id','weight','volume','date_created']
+        exclude = ['business_id','order_id','volume','business']
 
 
 

@@ -1,0 +1,213 @@
+{% extends 'business/base.html' %}
+
+{% block script %}
+    <script
+
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
+
+{% endblock %}
+
+{% block page %}
+<a href="{% url 'business-profile' %}">Business Profile</a>
+<a href="{% url 'business-order' %}">Orders Page</a>
+
+
+    <div class="row">
+        <div class="col-lg-8">
+
+            <!-- Expenditure by Month -->
+            <div class="panel">
+                <div class="panel-heading bg-blue">
+                  <h4 class="panel-title text-center text-white">
+                    Expenditure by Month
+                  </h4>
+                </div>
+                <div class="panel-body">
+                    <canvas id="expenditure Chart" height="110"></canvas>
+                    <script>
+                        var ctx = document.getElementById("expenditure Chart").getContext("2d");
+                        var data = {
+                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sep","Oct","Nov","Dec"],
+                            datasets: [
+                                {
+                                    label: "Expenditure by Month",
+                                    backgroundColor: "rgba(54,162,235,0.9)",
+                                    hoverBackgroundColor: "rgba(54,162,235,1)",
+                                    data: {{ expenditure  }}
+                                }
+                            ]
+                        };
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: data
+                        });
+
+                    </script>
+                </div>
+            </div>
+            <!-- Expenditure by Week -->
+            <div class="panel">
+                <div class="panel-heading bg-blue">
+                  <h4 class="panel-title text-center text-white">
+                   {{ business.business }} Expenditure by Week
+                  </h4>
+                </div>
+                <div class="panel-body">
+                    <canvas id="expenditure Chart" height="110"></canvas>
+                    <script>
+                        var ctx = document.getElementById("expenditure Chart").getContext("2d");
+                        var data = {
+                            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                            datasets: [
+                                {
+                                    label: "Expenditure by Week",
+                                    backgroundColor: "rgba(54,162,235,0.9)",
+                                    hoverBackgroundColor: "rgba(54,162,235,1)",
+                                    data: {{ expenditure  }}
+                                }
+                            ]
+                        };
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: data
+                        });
+
+                    </script>
+                </div>
+            </div>
+            <!-- Expenditure by Year -->
+            <div class="panel">
+                <div class="panel-heading bg-blue">
+                  <h4 class="panel-title text-center text-white">
+                   {{ business.business }} Expenditure by Year
+                  </h4>
+                </div>
+                <div class="panel-body">
+                    <canvas id="expenditure Chart" height="110"></canvas>
+                    <script>
+                        var ctx = document.getElementById("expenditure Chart").getContext("2d");
+                        var data = {
+                            labels: ["2007", "2008", "2009", "2010", "2011", "2012", "2013","2014","2015","2016","2017","2018"],
+                            datasets: [
+                                {
+                                    label: "Expenditure by Year",
+                                    backgroundColor: "rgba(54,162,235,0.9)",
+                                    hoverBackgroundColor: "rgba(54,162,235,1)",
+                                    data: {{ expenditure  }}
+                                }
+                            ]
+                        };
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: data
+                        });
+
+                    </script>
+                </div>
+            </div>
+
+            <!-- Orders by Week -->
+            <div class="panel">
+                <div class="panel-heading bg-blue">
+                  <h4 class="panel-title text-center text-white">
+                      Order by Week
+                  </h4>
+                </div>
+                <div class="panel-body">
+                    <canvas id="orderChart" height="110"></canvas>
+                    <script>
+                        var ctx = document.getElementById("orderChart").getContext("2d");
+                        var data = {
+                            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                            datasets: [
+                                {
+                                    label: "Expenditure by Week",
+                                    backgroundColor: "rgba(255,99,132,0.9)",
+                                    hoverBackgroundColor: "rgba(255,99,132,1)",
+                                    data: {{ businessOrders }}
+                                }
+                            ]
+                        };
+
+                        new Chart(ctx, {
+                          type: 'bar',
+                          data: data
+                        });
+
+                    </script>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-4">
+
+          <!-- TOP 3 orders -->
+          <div class="panel">
+              <div class="panel-heading bg-blue">
+                <h4 class="panel-title text-center text-white">
+                    {{ business.name }} orders Transport
+                </h4>
+              </div>
+              <div class="panel-body">
+                  <canvas id="orderChart" height="242"></canvas>
+                  <script>
+                      var ctx = document.getElementById("orderChart").getContext("2d");
+                      var data = {
+                          labels: {{ order.labels|safe }},
+                          datasets: [
+                              {
+                                  backgroundColor: [
+                                    "#36A2EB", "#FFCE56", "#FF6384"
+                                  ],
+                                  data: {{ order.data }}
+                              }
+                          ]
+                      };
+
+                      new Chart(ctx, {
+                        type: 'pie',
+                        data: data
+                      });
+
+                  </script>
+              </div>
+          </div>
+         <!-- TOP 10 business -->
+          <div class="panel">
+              <div class="panel-heading bg-blue">
+                <h4 class="panel-title text-center text-white">
+                  Top business by Expenditure at {{ business.name }}
+                </h4>
+              </div>
+              <div class="panel-body">
+                  <canvas id="orderChart" height="242"></canvas>
+                  <script>
+                      var ctx = document.getElementById("businessChart").getContext("2d");
+                      var data = {
+                          labels: {{ business.labels|safe }},
+                          datasets: [
+                              {
+                                  backgroundColor: [
+                                    "#36A2EB", "#FFCE56", "#FF6384"
+                                  ],
+                                  data: {{ business.data }}
+                              }
+                          ]
+                      };
+
+                      new Chart(ctx, {
+                        type: 'pie',
+                        data: data
+                      });
+
+                  </script>
+              </div>
+          </div>
+
+<a href="{% url 'company-sign-in' %}">Log out</a>
+{% endblock %}
