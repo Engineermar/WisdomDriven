@@ -1,10 +1,9 @@
 <title>Wisdom Driven's: Web Based Delivery Optimization/Analytical system </title>
-<body>
 <p> Developers: Lamar L. , Augustine M. Greg A.</p>
 <p>ITA-VT Data Analytics Program</p> 
 <p> Web Applications with DJango and Python</p>
 <p> Fall 2018 </p>
-</body>
+
 
 
 
