@@ -6,7 +6,7 @@
 -We are using Django 1.10 for this application 
 -via Online IDE Sourcelair.com
 <p align="center">
-<i>Instructions:
+<i>Instructions:</i> 
 -pip install -r requirements.txt
 -python manage.py makemigrations
 -python manage.py migrate
@@ -18,8 +18,7 @@
 
 
 ## Phase 1 Develoment Images
-![Pic 1](
-        WisdomDriven/Production Images/09F73F7F-68D3-4CE4-A928-32A4F530FA7B.jpeg
+![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/09F73F7F-68D3-4CE4-A928-32A4F530FA7B.jpeg
       )
 
 ---
