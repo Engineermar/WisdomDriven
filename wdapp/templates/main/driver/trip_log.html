@@ -1,0 +1,42 @@
+{% extends 'main/driver/base.html' %}
+
+{% block page %}
+    <div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">trips</h4>
+        </div>
+        <div class="panel-body">
+            <div class="text-right">
+                <a href="{% url 'driver-add-trip' %}" class="btn btn-pink">Add trip</a>
+                <br/>
+                <br/>
+            </div>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr class="bg-gray text-white">
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Short Description</th>
+                        <th>Price</th>
+                        <th class="text-center">Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trip in trips %}
+                    <tr>
+                        <td scope="row">{{ trip.trip_id }}</td>
+                        <td><a href="{% url 'driver-edit-trip' trip.trip_id %}">{{ trip.order_created}}</a></td>
+                        <td>{{ trip.driver_id }}</td>
+                        <td>{{ trip.company_id }}</td>
+                        <td class="text-center"><img class="img-rounded"
+                        src="{{ MEDIA_URL }}{{ trip.trip_id }}" width="50" height="50"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock%}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %} company {% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            var now = new Date();
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/company/order/notification/' + now.toISOString() + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        if (data['notification'] === 0) {
+                            $('.badge').text('');
+                        } else {
+                            $('.badge').text(data['notification']);
+                        }
+                    }
+                })
+            }, 3000)
+        })
+    </script>
+{% endblock %}
+
+{% block sidebar %}
+
+
+
+    {% url 'company-stats' as company_stats_url %}
+    {% url 'company-order'  as company_order_url %}
+    {% url 'company-profile' as company_profile_url %}
+
+    <div class="text-center">
+      <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.company.logo }}"
+          width="70" height="70" />
+      <br/>
+      <br/>
+      <h4>Hi, {{ request.user.company. }}</h4>
+
+    </div>
+
+    <div class="list-group">
+      <span class="text-uppercase">Dashboard</span>
+      
+        <a href="{% url 'company-stats' %}"
+          class="list-group-item  {% if request.path == company_stats_url %} active {% endif %} ">
+     {{ request.user.company.company }}  Statistics
+          <span class="badge"></span>
+      </a>
+
+      <a href="{% url 'company-order' %}"
+          class="list-group-item {% if request.path == company_order_url %} active {% endif %} ">
+        {{ request.user.company.company }} Order Page
+        <span class="badge"></span>
+      </a>
+
+     <a href="{% url 'company-profile' %}"
+          class="list-group-item {% if request.path == company_profile_url %} active {% endif %} ">
+        {{ request.user.company.company }}  Profile Page
+        <span class="badge"></span>
+      </a>
+
+      <span class="text-uppercase">Profile</span>
+      <a href="{% url 'company-profile' %}"
+          class="list-group-item {% if request.path == company_profile_url %} active {% endif %} ">Profile</a>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'main-sign-out' %}?next={{ request.path }}"
+          class="btn btn-pink">Logout</a>
+    </div>
+
+{% endblock %}

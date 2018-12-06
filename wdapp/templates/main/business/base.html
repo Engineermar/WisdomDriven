@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %} business {% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            var now = new Date();
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/business/order/notification/' + now.toISOString() + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        if (data['notification'] === 0) {
+                            $('.badge').text('');
+                        } else {
+                            $('.badge').text(data['notification']);
+                        }
+                    }
+                })
+            }, 3000)
+        })
+    </script>
+{% endblock %}
+
+{% block sidebar %}
+
+
+
+    {% url 'business-stats' as business_stats_url %}
+    {% url 'business-order'  as business_order_url %}
+    {% url 'business-profile' as business_profile_url %}
+
+    <div class="text-center">
+      <img class="img-circle" src="{{ MEDIA_URL }}{{ request.user.business.logo }}"
+          width="70" height="70" />
+      <br/>
+      <br/>
+      <h4>Hi, {{ request.user.business. }}</h4>
+
+    </div>
+
+    <div class="list-group">
+      <span class="text-uppercase">Dashboard</span>
+      
+        <a href="{% url 'business-stats' %}"
+          class="list-group-item  {% if request.path == business_stats_url %} active {% endif %} ">
+     {{ request.user.business.username }}  Statistics
+          <span class="badge"></span>
+      </a>
+
+      <a href="{% url 'business-order' %}"
+          class="list-group-item {% if request.path == business_order_url %} active {% endif %} ">
+        {{ request.user.business.username }} Order Page
+        <span class="badge"></span>
+      </a>
+
+     <a href="{% url 'business-profile' %}"
+          class="list-group-item {% if request.path == business_profile_url %} active {% endif %} ">
+        {{ request.user.business.username }} Business Profile Page
+        <span class="badge"></span>
+      </a>
+
+      <span class="text-uppercase">Profile</span>
+      <a href="{% url 'business-profile' %}"
+          class="list-group-item {% if request.path == business_profile_url %} active {% endif %} ">Profile</a>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'main-sign-out' %}?next={{ request.path }}"
+          class="btn btn-pink">Logout</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base_signup.html' %}
+{% load bootstrap3 %}
+
+
+{% block title %}Wisdom Drivers{% endblock %}
+{% block heading %} Company: Registration {% endblock %}  
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    
+    {% csrf_token %}
+    {% block footer %}   Need something ghipped? {% endblock %} 
+    {% bootstrap_form user_form %}
+    {% bootstrap_form business_form %}
+
+    <button type="submit" class="btn btn-pink pull-right">Sign Up</button>
+  </form>
+
+  <a href="{% url 'main-sign-in' %}">Already have an account?</a>
+  
+{% endblock %}

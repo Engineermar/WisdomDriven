@@ -1,0 +1,55 @@
+{% extends 'main/company/base.html' %}
+
+{% block page %}
+<a href="{% url 'company-profile' %}">Company Profile</a>
+<a href="{% url 'company-stats' %}">Statistics Page</a>
+<a href="{% url 'company-employee' %}">Order page</a>
+    <div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">{{ Company.company }}  Drivers</h4>
+        </div>
+        <div class="panel-body">
+            <br/>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                  <tr class="bg-gray text-white">
+
+                    <th>Driver_id</th>
+                    <th>Date Hired</th>
+                    <th>ssn</th>
+                    <th>Date of Birth</th>
+                    <th>License</th>
+                    <th>Other License</th>
+                    <th>Wage Plan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for driver in drivers %}
+                        <tr>
+                            <td scope="row">{{ driver_id.company_id }}</td>
+                            <td>{{ driver.driver_id }}</td>
+                            <td>{{ driver.date_hired }}</td>
+                            <td>{{ driver.ssn }}</td>
+                            <td>{{ driver.date_of_birth}}</td>
+                            <td>{{ driver.license }}</td>
+                            <td>{{ driver.other_license}}</td>
+                            <td>{{ driver.wage_plan }}</td>
+                            <td>
+
+                                {% if driver.wage_plan == "Hourly" %}
+                                    <form method="POST">
+                                      {% csrf_token %}
+                                      <input name="id" value="{{ driver.wage_plan}}" hidden>
+                                      <button class="btn btn-success">Ready</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
