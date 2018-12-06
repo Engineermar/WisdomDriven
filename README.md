@@ -1,16 +1,11 @@
-<html>
-<head>
 <title>Wisdom Driven's: Web Based Delivery Optimization/Analytical system </title>
-</head>
-
 <body>
 <p> Developers: Lamar L. , Augustine M. Greg A.</p>
 <p>ITA-VT Data Analytics Program</p> 
 <p> Web Applications with DJango and Python</p>
 <p> Fall 2018 </p>
-
 </body>
-</html>
+
 
 
 ![Pic 1](https://github.com/Engineermar/WisdomDriven/blob/master/Production%20Images/wdfakelogo.jpg )
