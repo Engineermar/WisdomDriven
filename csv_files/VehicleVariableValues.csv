@@ -1,0 +1,10 @@
+elementname,id,name
+Battery Type,4,Cobald Dioxide/Cobalt
+Battery Type,8,"Iron Phosphate/FePo "
+Battery Type,1,Lead Acid/Lead
+Battery Type,3,Lithium-ion/Li-Ion
+Battery Type,7,Manganese Oxide Spinel/MnO
+Battery Type,2,Nickel-Metal-Hydride/NiMH
+Battery Type,6,Nickle-Cobalt-Aluminum/NCA
+Battery Type,5,Nickle-Cobalt-Manganese/NCM
+Battery Type,9,Silicon
