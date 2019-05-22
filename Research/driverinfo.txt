@@ -1,0 +1,109 @@
+{
+    "Driver :" {{name.lastName}},{{name.firstName}}
+    "Date": {{date.now}},
+    
+  
+    "paymentScheme":{{random.weightedArrayElement(
+  {
+    "weights": [0.3,0.2,0.5],
+    "data": ["hourly","miles","hourly"]
+  }
+)}},
+
+    "iscertified":{{random.weightedArrayElement( {
+
+     "weights": [0.86,0.14],
+
+      "data": ["Yes","No"]}
+
+)}},
+      "truckId": {{random.number(100)}},
+    "currentTemperature": {{random.number(
+        {
+            "min":60,
+            "max":100
+        }
+    )}},
+  
+      "eventtype": {{random.weightedArrayElement(
+  {
+    "weights": [0.3,0.2,0.5],
+    "data": ["Normal","Lane Departure","Normal"]
+  }
+)}},
+     "isfoggy": {{random.arrayElement(
+        ["Yes","No"]
+    )}},
+      "israiny": {{random.arrayElement(
+        ["Yes","No"]
+    )}},
+      "iswindy": {{random.arrayElement(
+        ["Yes","No"]
+    )}},
+      "hoursdriven": {{random.number(
+        {
+            "min":0,
+            "max":100
+        }
+    )}},
+       "milesdriven": {{random.number(
+        {
+            "min":0.000000,
+            "max":1200.00000
+        }
+    )}},
+      "latitude": {{random.number(
+        {
+            "min": -97.370000,
+            "max": -87.66
+        }
+    )}},
+     "longitude": {{random.number(
+        {
+            "min":34.750000,
+            "max":42.250000
+        }
+    )}},
+     
+      "EYE_AR_THRESH": {{random.number( 
+
+        {
+
+            "min":0.2,
+
+            "max":0.4
+
+               
+        }
+
+    )}},
+
+    "EYE_AR_CONSEC_FRAME":{{random.number(
+
+        {
+
+            "min":3.0,    
+
+            "max":5.0
+
+             
+        }
+
+    )}},
+
+    "COUNTER": "{{random.number( {
+
+            "min":0,
+
+            "max":5
+
+            }
+
+       
+
+    )}}"
+}
+
+
+
+

@@ -1,0 +1,27 @@
+// define two constants, one for the eye aspect ratio to indicate
+// blink and then a second constant for the number of consecutive
+// frames the eye must be below the threshold
+{
+    "Driver First name": {{name.firstName}},
+    "Driver Last name": {{name.lastName}},
+    "EYE_AR_THRESH": {{random.number( 
+        {
+            "min":0.2,//Blink Thresh Level
+            "max":0.4,
+              3 //decimal
+        }
+    )}},
+    "EYE_AR_CONSEC_FRAME":{{random.number(
+        {
+            "min":3.0,     //successive frames with an EAR less than EYE_AR_THRESH  must happen in order for a blink to be registered.
+            "max":5.0
+            ,3 //decimal
+        }
+    )}},
+    "COUNTER": "{{random.number(
+            "min":0,
+            "max":5
+            
+       
+    )}}"
+}
